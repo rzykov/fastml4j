@@ -8,10 +8,10 @@ import org.nd4j.linalg.api.ndarray.INDArray
   */
 abstract class ClassificationModel {
 
-  def fit(trainData: INDArray, labels: INDArray)
+  def fit(trainData: INDArray, labels: INDArray, initWeights: Option[INDArray])
+
+  def predictClass(inputVector: INDArray): Double
 
   def predict(inputVector: INDArray): Double
-
-  def predictRaw(inputVector: INDArray): Double
 
 }
