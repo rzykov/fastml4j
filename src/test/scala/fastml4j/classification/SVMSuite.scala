@@ -1,10 +1,10 @@
-package mlscala.classification
+package fastml4j.classification
 
 /**
   * Created by rzykov on 25/06/17.
   */
 
-import mlscala.losses.HingeLoss
+import fastml4j.losses.HingeLoss
 import org.scalatest._
 import org.scalatest.Matchers._
 import org.nd4s.Implicits._

@@ -1,9 +1,9 @@
-package mlscala.loss
+package fastml4j.loss
 
 /**
   * Created by rzykov on 25/06/17.
   */
-import mlscala.losses.{HingeLoss, OLSLoss}
+import fastml4j.losses.{HingeLoss, OLSLoss}
 import org.nd4s.Implicits._
 import org.scalatest.Matchers._
 import org.scalatest._

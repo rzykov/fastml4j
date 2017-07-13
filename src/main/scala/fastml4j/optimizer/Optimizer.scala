@@ -1,10 +1,10 @@
-package mlscala.optimizer
+package fastml4j.optimizer
 
 import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 
-import mlscala.losses.Loss
+import fastml4j.losses.Loss
 
 /**
   * Created by rzykov on 23/06/17.

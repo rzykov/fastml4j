@@ -1,4 +1,4 @@
-package mlscala.losses
+package fastml4j.losses
 
 import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray

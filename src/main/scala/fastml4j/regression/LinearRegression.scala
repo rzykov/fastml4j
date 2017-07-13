@@ -1,7 +1,7 @@
-package mlscala.regression
+package fastml4j.regression
 
-import mlscala.losses.OLSLoss
-import mlscala.optimizer.GradientDescent
+import fastml4j.losses.OLSLoss
+import fastml4j.optimizer.GradientDescent
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4s.Implicits._

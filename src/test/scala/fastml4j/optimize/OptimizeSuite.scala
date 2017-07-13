@@ -1,10 +1,10 @@
-package mlscala.optimize
+package fastml4j.optimize
 
 /**
   * Created by rzykov on 25/06/17.
   */
-import mlscala.losses.OLSLoss
-import mlscala.optimizer.GradientDescent
+import fastml4j.losses.OLSLoss
+import fastml4j.optimizer.GradientDescent
 import org.scalatest._
 import org.scalatest.Matchers._
 import org.nd4s.Implicits._

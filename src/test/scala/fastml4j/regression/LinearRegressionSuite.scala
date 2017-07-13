@@ -1,4 +1,4 @@
-package mlscala.regression
+package fastml4j.regression
 
 import org.scalatest._
 import org.nd4s.Implicits._
