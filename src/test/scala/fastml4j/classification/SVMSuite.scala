@@ -12,6 +12,7 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 
 import math.random
+import scala.util.Random
 
 
 /**
@@ -19,42 +20,54 @@ import math.random
   */
 class SVMSuite extends FunSuite with BeforeAndAfter  {
 
-  test("2 lines") {
+  //taken from Spark test
+  def generateLogisticInput(
+    offset: Double,
+    scale: Double,
+    nPoints: Int,
+    seed: Int): (Array[Array[Double]], Array[Double]) = {
+    val rnd = new Random(seed)
+    val x1 = Array.fill[Double](nPoints)(rnd.nextGaussian())
 
-    val pointsLowerLine: Array[Array[Double]] = (0 to 100).map{ x =>  Array(5 * x + 3 + random / 20, random) }.toArray
-    val pointsUpperLine: Array[Array[Double]] = (0 to 100).map{ x =>  Array(5 * x + 1 + random / 20, random) }.toArray
-    val points = pointsLowerLine ++ pointsUpperLine
+    val y = (0 until nPoints).map { i =>
+      val p = 1.0 / (1.0 + math.exp(-(offset + scale * x1(i))))
+      if (rnd.nextDouble() < p) 1.0 else -1.0}
+      .toArray
 
-    val labels: Array[Double] = pointsLowerLine.map( x => -1.0) ++ pointsUpperLine.map( x => 1.0)
-
-    val svm = new SVM(lambdaL2 = 0.0, maxIterations = 1000  ,alpha = 0.00005, eps = 1e-8)
-    svm.fit(points.toNDArray, labels.toNDArray)
-    println( svm.weights)
-    println( svm.losses.size)
-    println( svm.losses.take(10))
+    val features = x1.map(Array(_, 1.0))
+    (features, y)
   }
 
-  test("HingeLoss: gradient random") {
+  test("Hinge Loss: test"){
+    //https://stats.stackexchange.com/questions/4608/gradient-of-hinge-loss
+    val trainData:Array[Array[Double]] = Array(Array(0,1),Array(1,2),Array(3,0),Array(4,1),Array(1,1))
+    val labels = Array(1,1,-1,-1,-1).toNDArray
+    val weights = Array(-0.326, 0.226).toNDArray
+    val loss = new HingeLoss(0)
 
-    val coef1 = 10
-    val coef2 = 3
-    val intercept = 4
-    val samples = 1000
-    val trainData: Seq[Array[Double]] = for { i <- (1 to 100)
-                                              a = random * 10 - 5
-                                              b = random * 100 - 50} yield Array(a ,b, 1.0)
+    val lr = new SVM(lambdaL2 = 0.0, maxIterations = 10000  ,alpha = 0.1, eps = 1e-3)
+    lr.fit(trainData.toNDArray, labels)
+    println( lr.weights)
+    println( lr.losses.size)
+    println( lr.losses.take(10))
+    println( lr.losses.takeRight(10))
 
-    val labels = trainData.map{ case Array(a, b, c) => a * coef1 + b * coef2 + c * intercept + random }
+  }
 
-    val weights: Seq[Array[Double]] =  (1 to 100).map{ _ => Array(random *10 - 5, random * 2, random - 0.5 ) }
+  test("simple synthetic test") {
+    val coef = 2.0
+    val intercept = 1
+    val samples = 100
 
-    val loss2 = new HingeLoss(0)
+    val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
 
-    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, trainData.toArray.toNDArray, labels.toNDArray).sumT[Double],
-      loss2.numericGradient(w.toNDArray, trainData.toArray.toNDArray, labels.toNDArray).sumT[Double])}
-      .map{ case(grad, nGrad ) => (grad - nGrad)/grad  }
 
-    assert( (gradients.sum / gradients.size) < 0.05)
+    val lr = new SVM(lambdaL2 = 0.0, maxIterations = 10000  ,alpha = 0.001, eps = 1e-3)
+    lr.fit(points.toNDArray, labels.toNDArray)
+    println( lr.weights)
+    println( lr.losses.size)
+    println( lr.losses.take(10))
+    println( lr.losses.takeRight(10))
   }
 
 

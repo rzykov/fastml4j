@@ -13,6 +13,8 @@ import org.nd4j.linalg.indexing.conditions.Conditions
 
 class HingeLoss(lambdaL2: Double) extends Loss {
 
+  //http://www1.inf.tu-dresden.de/~ds24/lehre/ml_ws_2013/ml_11_hinge.pdf
+
   def pureLoss(weights: INDArray, data: INDArray, labels: INDArray): INDArray = {
     val out = ((data dot weights.T) * labels).neg() + 1
     BooleanIndexing.replaceWhere(out, 0.0, Conditions.lessThan(0.0)) // condition 1-yt<0
@@ -25,7 +27,7 @@ class HingeLoss(lambdaL2: Double) extends Loss {
     val main: Double = scoreArr.sumT[Double]
     val regularized: Double =   (weights * weights).sumT[Double] * lambdaL2 / 2
 
-    (main / trainData.rows) + regularized
+    (main /*/ trainData.rows*/) + regularized
   }
 
 
@@ -38,7 +40,7 @@ class HingeLoss(lambdaL2: Double) extends Loss {
     //val main = (labels * mask).neg()
     val regularized = weights * lambdaL2
 
-    (main / trainData.rows + regularized)
+    (main  /*/ trainData.rows*/ + regularized)
   }
 
 }

@@ -16,15 +16,27 @@ import scala.math.random
 class HingeLossSuite extends FunSuite with BeforeAndAfter {
 
   test("HingeLoss: one sample test") {
-    val trainData = Array(Array(-1,2,3)).toNDArray
-    val labels = Array(-1).toNDArray
+    val trainData = Array(Array(-1.0, 2.0, 3.0)).toNDArray
+    val labels = Array(-1.0).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
 
     val loss = new HingeLoss(0)
-    assert( loss.loss(weights, trainData, labels) === 4.9 +- 0.01)}
+    assert(loss.loss(weights, trainData, labels) === 4.9 +- 0.01)
+    assert(loss.gradient(weights, trainData, labels) == Array(Array(-1.0,2.0,3.0)).toNDArray)
+  }
 
+  test("Hinge Loss: test"){
+    //https://stats.stackexchange.com/questions/4608/gradient-of-hinge-loss
+    val trainData:Array[Array[Double]] = Array(Array(0,1),Array(1,2),Array(3,0),Array(4,1),Array(1,1))
+    val labels = Array(1,1,-1,-1,-1).toNDArray
+    val weights = Array(-0.326, 0.226).toNDArray
+    val loss = new HingeLoss(0)
+    println(loss.loss(weights, trainData.toNDArray, labels))
+    println(loss.gradient(weights, trainData.toNDArray, labels) )
 
-  test("HingeLoss: Loss") {
+  }
+
+ test("HingeLoss: Loss") {
     val trainData = Array(Array(-1,2,3),Array(-4,5,6)).toNDArray
     val labels = Array(-1, 1).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
