@@ -47,6 +47,7 @@ class SVMSuite extends FunSuite with BeforeAndAfter  {
 
     val lr = new SVM(lambdaL2 = 0.0, maxIterations = 10000  ,alpha = 0.1, eps = 1e-3)
     lr.fit(trainData.toNDArray, labels)
+   //TODO write test
     println( lr.weights)
     println( lr.losses.size)
     println( lr.losses.take(10))
@@ -55,19 +56,16 @@ class SVMSuite extends FunSuite with BeforeAndAfter  {
   }
 
   test("simple synthetic test") {
-    val coef = 2.0
-    val intercept = 1
-    val samples = 100
+    val coef = 3.0
+    val intercept = 1.0
+    val samples = 10000
 
     val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
 
-
-    val lr = new SVM(lambdaL2 = 0.0, maxIterations = 10000  ,alpha = 0.001, eps = 1e-3)
+    val lr = new SVM(lambdaL2 = 0.0, maxIterations = 10000  ,alpha = 0.001, eps = 1e-4)
     lr.fit(points.toNDArray, labels.toNDArray)
-    println( lr.weights)
-    println( lr.losses.size)
-    println( lr.losses.take(10))
-    println( lr.losses.takeRight(10))
+    assert(lr.weights.getDouble(0,0) === coef +- 1)
+    assert(lr.weights.getDouble(0,1) === intercept +- 1)
   }
 
 

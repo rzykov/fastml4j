@@ -27,7 +27,7 @@ class HingeLoss(lambdaL2: Double) extends Loss {
     val main: Double = scoreArr.sumT[Double]
     val regularized: Double =   (weights * weights).sumT[Double] * lambdaL2 / 2
 
-    (main /*/ trainData.rows*/) + regularized
+    (main / trainData.rows) + regularized
   }
 
 
@@ -40,7 +40,7 @@ class HingeLoss(lambdaL2: Double) extends Loss {
     //val main = (labels * mask).neg()
     val regularized = weights * lambdaL2
 
-    (main  /*/ trainData.rows*/ + regularized)
+    (main / trainData.rows + regularized)
   }
 
 }

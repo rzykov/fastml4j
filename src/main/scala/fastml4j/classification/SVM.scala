@@ -13,7 +13,7 @@ class SVM(val lambdaL2: Double,
   val alpha: Double = 0.01,
   val maxIterations: Int = 1000,
   val stohasticBatchSize: Int = 100,
-  val optimizerType: String = "GradientDescentDecreasingLearningRate",
+  val optimizerType: String = "PegasosSGD",
   val eps: Double = 1e-6) extends ClassificationModel {
 
   var weights: INDArray = Nd4j.zeros(1)
@@ -22,9 +22,10 @@ class SVM(val lambdaL2: Double,
 
   def fit(trainData: INDArray, labels: INDArray, initWeights: Option[INDArray] = None) = {
 
-    val optimizer = optimizerType match {
+    val optimizer: Optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)
       case "GradientDescentDecreasingLearningRate" => new GradientDescentDecreasingLearningRate(maxIterations, alpha, eps)
+      case "PegasosSGD" => new PegasosSGD(maxIterations, alpha, eps)
       case _ => throw new Exception("Optimizer %s is not supported".format(optimizerType))
     }
 
