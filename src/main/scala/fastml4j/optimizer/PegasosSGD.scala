@@ -22,7 +22,7 @@ class PegasosSGD(
     val probs = (0 until data.rows).map(_ => 1.0/data.rows).toArray.toNDArray
     val sample = Nd4j.choice(index, probs, sampleSize)
     val sampleIndex =  for( i <- 0 until sampleSize) yield {sample.getInt(i)}
-    (data.getRows(sampleIndex.toArray : _*).dup(), labels.getColumns(sampleIndex.toArray : _*).dup())
+    (Nd4j.pullRows(data, 1,  sampleIndex.toArray), Nd4j.pullRows(labels, 0,  sampleIndex.toArray))
   }
 
   //http://ttic.uchicago.edu/~nati/Publications/PegasosMPB.pdf
