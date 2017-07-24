@@ -9,6 +9,7 @@ import org.scalatest._
 import org.scalatest.Matchers._
 import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
+import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 
 import scala.util.Random
@@ -25,10 +26,8 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
 
     val ols = new OLSLoss(0)
     val optimizer = new GradientDescent(maxIterations = 1000, stepSize = 0.000005, eps = 1e-4)
-    val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, data.toNDArray, out.toNDArray )
-    println(losses.size)
+    val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, new DataSet(data.toNDArray, out.toNDArray))
 
-  //  assert(losses.sliding(2).filter{ case Seq(left, right) => left < right}.size === 0 +- 5) // losses are descending
     assert(weights.getDouble(0,0) === coef1 +- 1)
     assert(weights.getDouble(0,1) === coef2 +- 1)
   }
@@ -38,13 +37,13 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
     offset: Double,
     scale: Double,
     nPoints: Int,
-    seed: Int): (Array[Array[Double]], Array[Double]) = {
+    seed: Int): (Array[Array[Double]], Array[Array[Double]]) = {
     val rnd = new Random(seed)
     val x1 = Array.fill[Double](nPoints)(rnd.nextGaussian())
 
     val y = (0 until nPoints).map { i =>
       val p = 1.0 / (1.0 + math.exp(-(offset + scale * x1(i))))
-      if (rnd.nextDouble() < p) 1.0 else 0.0}
+      if (rnd.nextDouble() < p) Array(1.0) else Array(0.0)}
       .toArray
 
     val features = x1.map(Array(_, 1.0))
@@ -60,13 +59,9 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
 
     val ols = new LogisticLoss(0)
     val optimizer = new PegasosSGD(maxIterations = 1000, lambda = 0.01, eps = 1e-4)
-    val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, points.toNDArray, labels.toNDArray )
-    println(losses.size)
+    val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, new DataSet(points.toNDArray, labels.toNDArray))
 
-    //  assert(losses.sliding(2).filter{ case Seq(left, right) => left < right}.size === 0 +- 5) // losses are descending
     assert(weights.getDouble(0,0) === coef +- 1)
     assert(weights.getDouble(0,1) === intercept +- 1)
   }
-
-
 }

@@ -3,6 +3,7 @@ package fastml4j.regression
 import fastml4j.losses.OLSLoss
 import fastml4j.optimizer.GradientDescent
 import org.nd4j.linalg.api.ndarray.INDArray
+import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4s.Implicits._
 
@@ -19,7 +20,7 @@ class LinearRegression(val lambdaL2: Double,
   var weights: INDArray = Nd4j.zeros(1)
   var losses: Seq[Double] = Seq[Double]()
 
-  def fit(trainData: INDArray, labels: INDArray, initWeights: Option[INDArray] = None): Unit = {
+  def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
 
     val optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)
@@ -27,11 +28,10 @@ class LinearRegression(val lambdaL2: Double,
     }
 
     val (weightsOut, lossesOut) = optimizer.optimize(new OLSLoss(lambdaL2),
-      initWeights = initWeights.getOrElse(Nd4j.zeros(trainData.columns)),
-      trainData = trainData, labels = labels)
+      initWeights.getOrElse(Nd4j.zeros(dataSet.numExamples)),
+      dataSet)
     weights = weightsOut
     losses = lossesOut
-
   }
 
   def predict(inputVector: INDArray): Double = {

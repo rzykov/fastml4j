@@ -9,24 +9,24 @@ import scala.annotation.tailrec
 /**
   * Created by rzykov on 23/06/17.
   */
-class GradientDescentDecreasingLearningRate(
+/*class GradientDescentDecreasingLearningRate(
   val maxIterations: Int,
   val alpha: Double,
   val eps: Double = 1e-6) extends Optimizer {
 
 
-  override def optimize(loss: Loss, initWeights: INDArray, trainData: INDArray, labels: INDArray)
+  override def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet, dataSet.getLabels: INDArray)
     : (INDArray, Seq[Double]) = {
 
     @tailrec
     def helperOptimizer( prevWeights:INDArray, losses: Seq[Double]): (INDArray, Seq[Double]) = {
       val step = losses.size
       println(step)
-      val gradient = loss.gradient(prevWeights, trainData, labels)
+      val gradient = loss.gradient(prevWeights, dataSet.getFeatures, dataSet.getLabels)
       val decreasingStepRate = 1.0 / (step + 1.0)/ gradient.norm2Number().doubleValue()
       println("decreasing " + gradient * alpha * decreasingStepRate)
       val weights = prevWeights - gradient * alpha * decreasingStepRate
-      val currentLoss = loss.loss(weights, trainData, labels)
+      val currentLoss = loss.loss(weights, dataSet.getFeatures, dataSet.getLabels)
       println(currentLoss)
       println(gradient + " " + weights)
 
@@ -38,4 +38,4 @@ class GradientDescentDecreasingLearningRate(
     helperOptimizer(initWeights, Seq[Double]())
   }
 
-}
+}*/

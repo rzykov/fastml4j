@@ -9,6 +9,7 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import fastml4j.optimizer._
 import fastml4j.losses._
+import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.ops.transforms.Transforms
 /**
   * Created by rzykov on 13/07/17.
@@ -24,7 +25,7 @@ class LogisticRegression(val lambdaL2: Double,
   var losses: Seq[Double] = Seq[Double]()
 
 
-  def fit(trainData: INDArray, labels: INDArray, initWeights: Option[INDArray] = None) = {
+  def fit(dataSet: DataSet, initWeights: Option[INDArray] = None) = {
 
     val optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)
@@ -33,9 +34,8 @@ class LogisticRegression(val lambdaL2: Double,
 
     val (weightsOut, lossesOut) = optimizer.optimize(
       new LogisticLoss(lambdaL2),
-      initWeights = initWeights.getOrElse(Nd4j.zeros(trainData.columns)),
-      trainData = trainData,
-      labels = labels)
+      initWeights = initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
+      dataset = dataSet)
 
     weights = weightsOut
     losses = lossesOut

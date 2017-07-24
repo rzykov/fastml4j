@@ -3,6 +3,7 @@ package fastml4j.optimizer
 import fastml4j.losses.Loss
 import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
+import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 
 import scala.annotation.tailrec
@@ -17,25 +18,17 @@ class PegasosSGD(
   val batchSize: Int = 100,
   val withReplacement: Boolean = true) extends Optimizer {
 
-  def sampleWithReplacementByRow(data: INDArray, labels: INDArray, sampleSize: Int ): (INDArray, INDArray) = {
-    val index = (0 until data.rows).toArray.toNDArray
-    val probs = (0 until data.rows).map(_ => 1.0/data.rows).toArray.toNDArray
-    val sample = Nd4j.choice(index, probs, sampleSize)
-    val sampleIndex =  for( i <- 0 until sampleSize) yield {sample.getInt(i)}
-    (Nd4j.pullRows(data, 1,  sampleIndex.toArray), Nd4j.pullRows(labels, 0,  sampleIndex.toArray))
-  }
-
   //http://ttic.uchicago.edu/~nati/Publications/PegasosMPB.pdf
-  def optimize(loss: Loss, initWeights: INDArray, trainData: INDArray, labels: INDArray): (INDArray, Seq[Double]) = {
+  def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet): (INDArray, Seq[Double]) = {
 
     @tailrec
     def helperOptimizer( prevWeights:INDArray, losses: Seq[Double], batch: Int): (INDArray, Seq[Double]) = {
-      val (sampleData, sampleLabels) = sampleWithReplacementByRow(trainData, labels, batchSize)
+      val sampleDataSet = dataSet.sample(batchSize, withReplacement)
       val eta = 1.0 / lambda / batch
       val weights = prevWeights * (1 - lambda * eta)  -
-        loss.gradient(prevWeights, sampleData, sampleLabels) * eta
+        loss.gradient(prevWeights, sampleDataSet) * eta
 
-      val currentLoss = loss.loss(weights, sampleData, sampleLabels)
+      val currentLoss = loss.loss(weights, sampleDataSet)
 
       if( losses.size > 0 && ((math.abs(currentLoss - losses.last) < eps) || losses.size >= maxIterations))
         (weights, losses :+ currentLoss)
