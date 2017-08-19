@@ -67,9 +67,9 @@ class BinaryMetrics(val outcome: INDArray, val predictedLabels: INDArray, val bi
   }
 
 
-  val recallByTreshhold: Seq[(Double, Double)] = {
+  def recallByTreshhold: Seq[(Double, Double)] = {
 
-    lazy val totalRealPositives: Int = confusionMatrixByThreshold.map (_._2).head
+    val totalRealPositives: Int = confusionMatrixByThreshold.map (_._2).head
       .filter(_.realClass == 1)
       .map(_.qty)
       .sum
@@ -82,7 +82,7 @@ class BinaryMetrics(val outcome: INDArray, val predictedLabels: INDArray, val bi
       (threshold, truePositives.toDouble / totalRealPositives.toDouble)}
   }
 
-  val precisionByTreshhold: Seq[(Double, Double)] = {
+  def precisionByTreshhold: Seq[(Double, Double)] = {
 
     confusionMatrixByThreshold.map { case (threshold, confusions) =>
       val truePositives = confusions
