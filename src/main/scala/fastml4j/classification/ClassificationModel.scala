@@ -9,10 +9,12 @@ import org.nd4j.linalg.dataset.DataSet
   */
 abstract class ClassificationModel {
 
-  def fit(dataSet: DataSet, initWeights: Option[INDArray])
+  def fit(dataSet: DataSet, initWeights: Option[INDArray]): Unit
 
   def predictClass(inputVector: INDArray): Double
 
   def predict(inputVector: INDArray): Double
+
+//  def predict(dataSet: DataSet): INDArray
 
 }

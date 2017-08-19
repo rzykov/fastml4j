@@ -50,4 +50,5 @@ class LogisticRegression(val lambdaL2: Double,
   }
 
 
+
 }

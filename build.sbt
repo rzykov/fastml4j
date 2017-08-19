@@ -16,7 +16,7 @@ libraryDependencies += "org.rogach" % "scallop_2.11" % "2.1.1"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
 
-val nd4jVersion = "0.8.0"
+val nd4jVersion = "0.9.1"
 
 libraryDependencies += "org.nd4j" % "nd4j-native-platform" % nd4jVersion
 
