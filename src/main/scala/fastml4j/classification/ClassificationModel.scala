@@ -15,6 +15,4 @@ abstract class ClassificationModel {
 
   def predict(inputVector: INDArray): Double
 
-//  def predict(dataSet: DataSet): INDArray
-
 }
