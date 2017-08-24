@@ -1,12 +1,13 @@
 package fastml4j.losses
 
-import org.nd4s.Implicits._
+import fastml4j.implicits.RichIndarray._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.BooleanIndexing
 import org.nd4j.linalg.indexing.conditions.Conditions
 import org.nd4j.linalg.ops.transforms.Transforms
+import org.nd4s.Implicits._
 
 /**
   * Created by rzykov on 31/05/17.
@@ -22,7 +23,7 @@ class LogisticLoss(lambdaL2: Double) extends Loss {
 
     val sigmoidVec = sigmoid(weights, dataSet.getFeatureMatrix)
     val lossVec = ((dataSet.getLabels.T.neg) dot (Transforms.log(sigmoidVec))) -
-      ((dataSet.getLabels.T.neg + 1.0) dot Transforms.log(((sigmoidVec.neg + 1.0))))
+      ((1.0 + dataSet.getLabels.T.neg) dot Transforms.log((1.0 + sigmoidVec.neg)))
     val regularized: Double = (weights * weights).sumT[Double] * lambdaL2 / 2
 
     (lossVec.sumT[Double] / dataSet.numExamples) + regularized

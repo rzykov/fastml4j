@@ -1,11 +1,11 @@
 package fastml4j.metric
 
 import fastml4j.classification.ClassificationModel
-import org.nd4s.Implicits._
+import fastml4j.implicits.RichIndarray._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
-import fastml4j.implicits.RichIndarray._
+import org.nd4s.Implicits._
 
 
 class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: INDArray) {
