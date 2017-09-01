@@ -1,7 +1,7 @@
 package fastml4j.metric
 
 import fastml4j.classification.ClassificationModel
-import fastml4j.implicits.RichIndarray._
+import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j

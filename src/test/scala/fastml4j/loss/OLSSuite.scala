@@ -16,13 +16,12 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
 
   test("OLSLoss: Loss") {
     val trainData = Array(Array(-1,2,3),Array(-4,5,6))
-    val labels = Array(-1, 1)
+    val labels = Array(Array(-1), Array(1))
     val weights = Array(0.2, 0.7, 0.9)
 
     val loss = new OLSLoss(0)
     assert( loss.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 18.6 +- 0.01)
     assert( loss.loss(weights.toNDArray, new DataSet((trainData ++ trainData).toNDArray, (labels ++ labels).toNDArray)) === 18.6 +- 0.01)
-
 
     val loss2 = new OLSLoss(1)
     assert( loss2.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 19.27 +- 0.01)}
@@ -30,7 +29,7 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
   test("OLSLoss: gradient") {
 
     val trainData2 = Array(Array(-1,2,3),Array(-4,5,6)).toNDArray
-    val labels2 = Array(-1, 1).toNDArray
+    val labels2 = Array(Array(-1), Array(1)).toNDArray
     val weights2 = Array(0.2, 0.7, 0.9).toNDArray
 
     val loss2 = new OLSLoss(0)
@@ -38,7 +37,7 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
       loss2.gradient(weights2, new DataSet(trainData2, labels2)).sumT[Double] +- 0.3)
 
     val trainData = Array[Array[Double]](Array(-1.0,2.0,3.0),Array(-4.0,5.0,6.0), Array(-2.0,5.0,4.0)).toNDArray
-    val labels = Array[Double](-1.0, 1.0, 1.0).toNDArray
+    val labels = Array(Array(-1.0), Array(1.0), Array(1.0)).toNDArray
     val weights = Array[Double](0.2, 0.7, 0.9).toNDArray
 
     val loss = new OLSLoss(0)

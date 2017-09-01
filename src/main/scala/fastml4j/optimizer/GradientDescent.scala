@@ -25,7 +25,7 @@ class GradientDescent(
       val weights = prevWeights - loss.gradient(prevWeights, dataset) * stepSize
       val currentLoss = loss.loss(weights, dataset)
 
-      if( losses.size > 0 && ((math.abs(currentLoss - losses.last) < eps) || losses.size >= maxIterations))
+      if( losses.nonEmpty && ((math.abs(currentLoss - losses.last) < eps) || losses.size >= maxIterations))
         (weights, losses :+ currentLoss)
       else
         helperOptimizer(weights, losses :+ currentLoss)}

@@ -16,7 +16,7 @@ abstract class Loss{
 
   // More about gradient checking:  http://cs231n.github.io/neural-networks-3/
   def numericGradient(weights: INDArray, dataSet: DataSet, eps: Double = 1e-6): INDArray =
-    (0 to (weights.columns() - 1)).map {
+    (0 until weights.columns).map {
       i =>
         val oldWeights = weights.dup.put(0, i, weights.get(0,i) - eps)
         val newWeights = weights.dup.put(0, i, weights.get(0,i) + eps)

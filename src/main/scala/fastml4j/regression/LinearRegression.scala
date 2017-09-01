@@ -5,6 +5,7 @@ import fastml4j.optimizer.GradientDescent
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
+import org.nd4j.linalg.ops.transforms.Transforms
 import org.nd4s.Implicits._
 
 /**
@@ -15,10 +16,15 @@ class LinearRegression(val lambdaL2: Double,
   val maxIterations: Int = 1000,
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "GradientDescent",
-  val eps: Double = 1e-6) {
+  val eps: Double = 1e-6,
+  val standardize: Boolean = true) extends RegressionModel {
 
   var weights: INDArray = Nd4j.zeros(1)
   var losses: Seq[Double] = Seq[Double]()
+  //var standardDeviationFeatures: INDArray
+ // var standardDeviationLabels: Double
+
+
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
 
@@ -28,7 +34,7 @@ class LinearRegression(val lambdaL2: Double,
     }
 
     val (weightsOut, lossesOut) = optimizer.optimize(new OLSLoss(lambdaL2),
-      initWeights.getOrElse(Nd4j.zeros(dataSet.numExamples)),
+      initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
       dataSet)
     weights = weightsOut
     losses = lossesOut
@@ -38,5 +44,6 @@ class LinearRegression(val lambdaL2: Double,
     (inputVector dot weights).sumT[Double]
   }
 
+  def transform(dataSet: DataSet): INDArray = (weights dot dataSet.getFeatures.T)
 
 }

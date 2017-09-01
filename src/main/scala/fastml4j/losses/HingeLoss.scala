@@ -7,7 +7,7 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.BooleanIndexing
 import org.nd4j.linalg.indexing.conditions.Conditions
 import org.nd4s.Implicits._
-import fastml4j.implicits.RichIndarray._
+import fastml4j.util.Implicits._
 
 /**
   * Created by rzykov on 31/05/17.
@@ -39,8 +39,6 @@ class HingeLoss(lambdaL2: Double) extends Loss {
     BooleanIndexing.replaceWhere(mask, 1.0, Conditions.greaterThan(0.0)) //condition yt<1
 
     val main = - (dataSet.getFeatureMatrix muliColumnVector (dataSet.getLabels.T * mask).T).sum(0)
-
-    //val main = (dataSet.getLabels * mask).neg()
     val regularized = weights * lambdaL2
 
     (main / dataSet.numExamples + regularized)

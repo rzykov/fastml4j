@@ -25,7 +25,8 @@ class LogisticRegression(val lambdaL2: Double,
   var losses: Seq[Double] = Seq[Double]()
 
 
-  def fit(dataSet: DataSet, initWeights: Option[INDArray] = None) = {
+  def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
+    dataSet.validate()
 
     val optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)

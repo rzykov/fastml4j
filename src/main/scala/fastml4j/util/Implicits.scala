@@ -1,11 +1,11 @@
-package fastml4j.implicits
+package fastml4j.util
 
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4s.Implicits._
 
-object RichIndarray  {
+object Implicits  {
 
 
   implicit class ArrayFromIndarray(underlying: INDArray) {
@@ -24,6 +24,11 @@ object RichIndarray  {
         .toArray
 
   }
+
+ /* implicit class DataSetImplicits(dataset: DataSet) {
+
+
+  }*/
 
   implicit class IntWithIndarray(value: Int)  {
     def +(indArray: INDArray): INDArray = indArray + value
