@@ -7,7 +7,7 @@ abstract class RegressionModel {
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray]): Unit
 
-  def predict(inputVector: INDArray): Double
+  def predict(inputVector: INDArray): Float
 
 
 }

@@ -6,18 +6,20 @@ import org.nd4j.linalg.factory.Nd4j
 import fastml4j.optimizer._
 import fastml4j.losses._
 import org.nd4j.linalg.dataset.DataSet
+import fastml4j.util.Implicits._
+
 /**
   * Created by rzykov on 23/06/17.
   */
-class SVM(val lambdaL2: Double,
-  val alpha: Double = 0.01,
+class SVM(val lambdaL2: Float,
+  val alpha: Float = 0.01f,
   val maxIterations: Int = 1000,
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "PegasosSGD",
-  val eps: Double = 1e-6) extends ClassificationModel {
+  val eps: Float = 1e-6f) extends ClassificationModel {
 
   var weights: INDArray = Nd4j.zeros(1)
-  var losses: Seq[Double] = Seq[Double]()
+  var losses: Seq[Float] = Seq[Float]()
 
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
@@ -40,13 +42,13 @@ class SVM(val lambdaL2: Double,
     losses = lossesOut
   }
 
-  def predictClass(inputVector: INDArray): Double = {
-    val sign = math.signum((inputVector dot weights.T).sumT[Double])
-    if( sign != 0 ) sign else 1.0
+  def predictClass(inputVector: INDArray): Float = {
+    val sign = math.signum((inputVector dot weights.T).sumT)
+    if( sign != 0 ) sign.toFloat else 1.0f
   }
 
-  def predict(inputVector:  INDArray): Double = {
-    (inputVector dot weights).sumT[Double]
+  def predict(inputVector:  INDArray): Float = {
+    (inputVector dot weights).sumT
   }
 
 

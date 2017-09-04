@@ -11,16 +11,16 @@ import org.nd4j.linalg.dataset.DataSet
 
 class BinaryClassificationMetricsSuite extends FunSuite {
 
-  def assertSeq(a: Seq[Double], b: Seq[Double]): Unit = assert(a.zip(b).forall{ case(aX, bX) => aX === bX +- 0.01} )
-  def assertTupleSeq(a: Seq[(Double, Double)], b: Seq[(Double, Double)]): Unit =
-    assert(a.zip(b).forall{ case((aX, aY), (bX, bY)) => aX === bX +- 0.01 && aY === bY +- 0.01 } )
+  def assertSeq(a: Seq[Float], b: Seq[Float]): Unit = assert(a.zip(b).forall{ case(aX, bX) => aX === bX +- 0.01f} )
+  def assertTupleSeq(a: Seq[(Float, Float)], b: Seq[(Float, Float)]): Unit =
+    assert(a.zip(b).forall{ case((aX, aY), (bX, bY)) => aX === bX +- 0.01f && aY === bY +- 0.01f } )
 
 
   private def validateMetrics(metrics: BinaryClassificationMetrics,
-    expectedThresholds: Seq[Double],
-    expectedROCCurve: Seq[(Double, Double)],
-    expectedPrecisions: Seq[Double],
-    expectedRecalls: Seq[Double]): Unit = {
+    expectedThresholds: Seq[Float],
+    expectedROCCurve: Seq[(Float, Float)],
+    expectedPrecisions: Seq[Float],
+    expectedRecalls: Seq[Float]): Unit = {
 
     assertSeq(metrics.binTreshholds, expectedThresholds)
     assertTupleSeq(metrics.precisionByTreshhold, expectedThresholds.zip(expectedPrecisions))
@@ -40,15 +40,15 @@ class BinaryClassificationMetricsSuite extends FunSuite {
     val real = Array(0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0).map(Array(_)).toNDArray
     val metrics = new BinaryClassificationMetrics(real, predictions)
 
-    val thresholds = Seq(0.8, 0.6, 0.4, 0.1)
+    val thresholds = Seq[Float](0.8f, 0.6f, 0.4f, 0.1f)
     val numTruePositives = Seq(1, 3, 3, 4)
     val numFalsePositives = Seq(0, 1, 2, 3)
     val numPositives = 4
     val numNegatives = 3
-    val precisions = numTruePositives.zip(numFalsePositives).map { case (t, f) => t.toDouble / (t + f)}
-    val recalls = numTruePositives.map(t => t.toDouble / numPositives)
-    val fpr = numFalsePositives.map(f => f.toDouble / numNegatives)
-    val rocCurve = Seq((0.0, 0.0)) ++ fpr.zip(recalls) ++ Seq((1.0, 1.0))
+    val precisions = numTruePositives.zip(numFalsePositives).map { case (t, f) => t.toFloat / (t + f)}
+    val recalls = numTruePositives.map(t => t.toFloat / numPositives)
+    val fpr = numFalsePositives.map(f => f.toFloat / numNegatives)
+    val rocCurve = Seq((0.0f, 0.0f)) ++ fpr.zip(recalls) ++ Seq((1.0f, 1.0f))
 
     validateMetrics(metrics, thresholds, rocCurve, precisions, recalls)
   }
@@ -59,11 +59,11 @@ class BinaryClassificationMetricsSuite extends FunSuite {
     val real = Array(1.0, 1.0).map(Array(_)).toNDArray
     val metrics = new BinaryClassificationMetrics(real, predictions)
 
-    val thresholds = Seq(0.5)
-    val precisions = Seq(1.0)
-    val recalls = Seq(1.0)
-    val fpr = Seq(0.0)
-    val rocCurve = Seq((0.0, 0.0)) ++ fpr.zip(recalls) ++ Seq((1.0, 1.0))
+    val thresholds = Seq(0.5f)
+    val precisions = Seq(1.0f)
+    val recalls = Seq(1.0f)
+    val fpr = Seq(0.0f)
+    val rocCurve = Seq((0.0f, 0.0f)) ++ fpr.zip(recalls) ++ Seq((1.0f, 1.0f))
 
     validateMetrics(metrics, thresholds, rocCurve, precisions, recalls)
   }
@@ -73,11 +73,11 @@ class BinaryClassificationMetricsSuite extends FunSuite {
     val real = Array(0.0, 0.0).map(Array(_)).toNDArray
     val metrics = new BinaryClassificationMetrics(real, predictions)
 
-    val thresholds = Seq(0.5)
-    val precisions = Seq(0.0)
-    val recalls = Seq(0.0)
-    val fpr = Seq(1.0)
-    val rocCurve = Seq((0.0, 0.0)) ++ fpr.zip(recalls) ++ Seq((1.0, 1.0))
+    val thresholds = Seq(0.5f)
+    val precisions = Seq(0.0f)
+    val recalls = Seq(0.0f)
+    val fpr = Seq(1.0f)
+    val rocCurve = Seq((0.0f, 0.0f)) ++ fpr.zip(recalls) ++ Seq((1.0f, 1.0f))
 
     validateMetrics(metrics, thresholds, rocCurve, precisions, recalls)
   }
@@ -88,16 +88,15 @@ class BinaryClassificationMetricsSuite extends FunSuite {
 
     val predictionsRandom = Array( 0.5, 0.5 , 0.5, 0.5, 0.5, 0.5, 0.5, 0.5).map(Array(_)).toNDArray
     val metricsRandom = new BinaryClassificationMetrics(real, predictionsRandom)
-    assert(metricsRandom.aucRoc === 0.5 +- 0.05)
+    assert(metricsRandom.aucRoc === 0.5f +- 0.05f)
 
     val predictionsNegative = Array(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0).map(Array(_)).toNDArray
     val metricsNegative = new BinaryClassificationMetrics(real, predictionsNegative)
-    assert(metricsNegative.aucRoc === 0.0 +- 0.05)
+    assert(metricsNegative.aucRoc === 0.0f +- 0.05f)
 
     val predictionsTrue = Array(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0).map(Array(_)).toNDArray
     val metricsTrue = new BinaryClassificationMetrics(real, predictionsTrue)
-    assert(metricsTrue.aucRoc === 1.0 +- 0.05)
-
+    assert(metricsTrue.aucRoc === 1.0f +- 0.05f)
 
   }
 

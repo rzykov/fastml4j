@@ -9,20 +9,23 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import fastml4j.optimizer._
 import fastml4j.losses._
+import fastml4j.util.Implicits._
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.ops.transforms.Transforms
+
+
 /**
   * Created by rzykov on 13/07/17.
   */
-class LogisticRegression(val lambdaL2: Double,
-  val alpha: Double = 0.01,
+class LogisticRegression(val lambdaL2: Float,
+  val alpha: Float = 0.01f,
   val maxIterations: Int = 1000,
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "GradientDescent",
-  val eps: Double = 1e-6) extends ClassificationModel {
+  val eps: Float = 1e-6f) extends ClassificationModel {
 
   var weights: INDArray = Nd4j.zeros(1)
-  var losses: Seq[Double] = Seq[Double]()
+  var losses: Seq[Float] = Seq[Float]()
 
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
@@ -42,14 +45,12 @@ class LogisticRegression(val lambdaL2: Double,
     losses = lossesOut
   }
 
-  def predictClass(inputVector: INDArray): Double = {
+  def predictClass(inputVector: INDArray): Float = {
     math.round(predict(inputVector))
   }
 
-  def predict(inputVector:  INDArray): Double = {
-    Transforms.sigmoid(inputVector dot weights).sumT[Double]
+  def predict(inputVector:  INDArray): Float = {
+    Transforms.sigmoid(inputVector dot weights).sumT
   }
-
-
 
 }

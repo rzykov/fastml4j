@@ -10,7 +10,7 @@ import org.nd4s.Implicits._
 
 class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: INDArray) {
 
-  lazy val binTreshholds: Seq[Double] = predictedLabels
+  lazy val binTreshholds: Seq[Float] = predictedLabels
       .ravel
       .toArray
       .flatten
@@ -20,9 +20,9 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
       .toSeq
 
 
-  case class Confusion(predictedClass: Double, realClass: Double, qty: Int)
+  case class Confusion(predictedClass: Float, realClass: Float, qty: Int)
 
-  lazy val confusionMatrixByThreshold: Seq[(Double, Seq[Confusion])] = {
+  lazy val confusionMatrixByThreshold: Seq[(Float, Seq[Confusion])] = {
 
     val zipped = Nd4j.hstack( predictedLabels, outcome)
       .toArray
@@ -40,7 +40,7 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
   }
 
 
-  def recallByTreshhold: Seq[(Double, Double)] = {
+  def recallByTreshhold: Seq[(Float, Float)] = {
 
     val totalRealPositives: Int = confusionMatrixByThreshold.map (_._2).head
       .filter(_.realClass == 1)
@@ -53,10 +53,10 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
           .map(_.qty)
           .sum
 
-      (threshold, if(truePositives == 0) 0 else truePositives.toDouble / totalRealPositives.toDouble)}
+      (threshold, if(truePositives == 0) 0 else truePositives.toFloat / totalRealPositives.toFloat)}
   }
 
-  def precisionByTreshhold: Seq[(Double, Double)] = {
+  def precisionByTreshhold: Seq[(Float, Float)] = {
 
     confusionMatrixByThreshold.map { case (threshold, confusions) =>
       val truePositives = confusions
@@ -69,10 +69,10 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
         .map(_.qty)
         .sum
 
-      (threshold, if(truePositives == 0) 0 else truePositives.toDouble / allPositives.toDouble)}
+      (threshold, if(truePositives == 0) 0 else truePositives.toFloat / allPositives.toFloat)}
   }
 
-  def roc: Seq[(Double, Double)] = {
+  def roc: Seq[(Float, Float)] = {
 
     val rocCurve = confusionMatrixByThreshold.map { case (threshold, confusions) =>
       val truePositives = confusions
@@ -95,16 +95,16 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
         .map(_.qty)
         .sum
 
-      val tpr = if(truePositives == 0) 0.0 else truePositives.toDouble / (truePositives + falseNegatives)
-      val fpr = if(falsePositives == 0) 0.0 else falsePositives.toDouble / (trueNegatives + falsePositives)
+      val tpr = if(truePositives == 0) 0.0f else truePositives.toFloat / (truePositives + falseNegatives)
+      val fpr = if(falsePositives == 0) 0.0f else falsePositives.toFloat / (trueNegatives + falsePositives)
 
 
        (fpr, tpr)  }
 
-    (0.0, 0.0) +: rocCurve :+ (1.0, 1.0)
+    (0.0f, 0.0f) +: rocCurve :+ (1.0f, 1.0f)
   }
 
-  def aucRoc: Double =
+  def aucRoc: Float =
     roc.sortBy( x => (x._1, x._2))
       .sliding(2)
       .map { case Seq((leftX, leftY), (rightX, rightY)) =>  (rightX - leftX) * (rightY + leftY ) / 2 }

@@ -11,19 +11,19 @@ import scala.annotation.tailrec
   */
 /*class GradientDescentDecreasingLearningRate(
   val maxIterations: Int,
-  val alpha: Double,
-  val eps: Double = 1e-6) extends Optimizer {
+  val alpha: Float,
+  val eps: Float = 1e-6) extends Optimizer {
 
 
   override def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet, dataSet.getLabels: INDArray)
-    : (INDArray, Seq[Double]) = {
+    : (INDArray, Seq[Float]) = {
 
     @tailrec
-    def helperOptimizer( prevWeights:INDArray, losses: Seq[Double]): (INDArray, Seq[Double]) = {
+    def helperOptimizer( prevWeights:INDArray, losses: Seq[Float]): (INDArray, Seq[Float]) = {
       val step = losses.size
       println(step)
       val gradient = loss.gradient(prevWeights, dataSet.getFeatures, dataSet.getLabels)
-      val decreasingStepRate = 1.0 / (step + 1.0)/ gradient.norm2Number().doubleValue()
+      val decreasingStepRate = 1.0 / (step + 1.0)/ gradient.norm2Number().FloatValue()
       println("decreasing " + gradient * alpha * decreasingStepRate)
       val weights = prevWeights - gradient * alpha * decreasingStepRate
       val currentLoss = loss.loss(weights, dataSet.getFeatures, dataSet.getLabels)
@@ -35,7 +35,7 @@ import scala.annotation.tailrec
       else
         helperOptimizer(weights, losses :+ currentLoss)}
 
-    helperOptimizer(initWeights, Seq[Double]())
+    helperOptimizer(initWeights, Seq[Float]())
   }
 
 }*/

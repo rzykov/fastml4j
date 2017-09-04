@@ -11,6 +11,6 @@ import org.nd4j.linalg.dataset.DataSet
   */
 abstract class Optimizer {
 
-  def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet): (INDArray, Seq[Double])
+  def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet): (INDArray, Seq[Float])
 
 }

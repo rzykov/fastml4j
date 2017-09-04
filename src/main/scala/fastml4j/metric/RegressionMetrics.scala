@@ -11,21 +11,21 @@ import org.nd4s.Implicits._
 class RegressionMetrics(val real: INDArray, val predictedLabels: INDArray) {
 
 
-  lazy val rootDifferenceSumSquared: Double =  Nd4j.norm2(real - predictedLabels).sumT[Double]
+  lazy val rootDifferenceSumSquared: Float =  Nd4j.norm2(real - predictedLabels).sumT
 
-  lazy val differenceSumSquared: Double =  rootDifferenceSumSquared * rootDifferenceSumSquared
+  lazy val differenceSumSquared: Float =  rootDifferenceSumSquared * rootDifferenceSumSquared
 
-  lazy val differenceVariance: Double = (real - predictedLabels).varT[Double]
+  lazy val differenceVariance: Float = (real - predictedLabels).varT[Float]
 
-  lazy val numCases: Double = real.rows().toDouble
+  lazy val numCases: Float = real.rows().toFloat
 
   require(numCases > 1, "use matrix rather than vectors")
 
-  def meanSquaredError: Double = differenceSumSquared / numCases
+  def meanSquaredError: Float = differenceSumSquared / numCases
 
-  def rootMeanSquaredError: Double = rootDifferenceSumSquared / math.sqrt(numCases)
+  def rootMeanSquaredError: Float = rootDifferenceSumSquared / math.sqrt(numCases).toFloat
 
-  lazy val meanAbsoluteError: Double = Nd4j.norm1(real - predictedLabels).sumT[Double]
+  lazy val meanAbsoluteError: Float = Nd4j.norm1(real - predictedLabels).sumT
 
   override def toString = s"rootMeanSquaredError: $rootMeanSquaredError  \nmeanSquaredError $meanSquaredError \nmeanAbsoluteerror $meanAbsoluteError\n"
 

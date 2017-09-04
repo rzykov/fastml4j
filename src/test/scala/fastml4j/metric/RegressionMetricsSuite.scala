@@ -18,13 +18,13 @@ class RegressionMetricsSuite extends FunSuite {
 
 
   test("perfect test") {
-    val labels = (0 to 100).map( x => Array(x.toDouble)).toArray
+    val labels = (0 to 100).map( x => Array(x.toFloat)).toArray
     val output = labels.map(_.map(_ + math.random / 100))
     val evaluator = new RegressionMetrics(labels.toNDArray, output.toNDArray)
 
-    assert(evaluator.rootMeanSquaredError === 0.0 +- 0.1)
-    assert(evaluator.meanSquaredError === 0.0 +- 0.1)
-    assert(evaluator.meanAbsoluteError === 0.5 +- 0.1)
+    assert(evaluator.rootMeanSquaredError === 0.0f +- 0.1f)
+    assert(evaluator.meanSquaredError === 0.0f +- 0.1f)
+    assert(evaluator.meanAbsoluteError === 0.5f +- 0.1f)
   }
 
 
@@ -33,9 +33,9 @@ class RegressionMetricsSuite extends FunSuite {
     val output = labels.reverse.map(_.map( _  + math.random ))
     val evaluator = new RegressionMetrics(labels.toNDArray, output.toNDArray)
 
-    assert(evaluator.rootMeanSquaredError === 500.0 +- 100.0)
-    assert(evaluator.meanSquaredError === 400000.0 +- 100000.0 )
-    assert(evaluator.meanAbsoluteError === 500000.0 +- 10000.0)
+    assert(evaluator.rootMeanSquaredError === 500.0f +- 100.0f)
+    assert(evaluator.meanSquaredError === 400000.0f +- 100000.0f )
+    assert(evaluator.meanAbsoluteError === 500000.0f +- 10000.0f)
 
   }
 

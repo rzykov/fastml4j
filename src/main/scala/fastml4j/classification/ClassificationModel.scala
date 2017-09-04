@@ -11,8 +11,8 @@ abstract class ClassificationModel {
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray]): Unit
 
-  def predictClass(inputVector: INDArray): Double
+  def predictClass(inputVector: INDArray): Float
 
-  def predict(inputVector: INDArray): Double
+  def predict(inputVector: INDArray): Float
 
 }

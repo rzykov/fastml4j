@@ -13,16 +13,16 @@ import scala.annotation.tailrec
   */
 class PegasosSGD(
   val maxIterations: Int,
-  val lambda: Double,
-  val eps: Double = 1e-6,
+  val lambda: Float,
+  val eps: Float = 1e-6f,
   val batchSize: Int = 100,
   val withReplacement: Boolean = true) extends Optimizer {
 
   //http://ttic.uchicago.edu/~nati/Publications/PegasosMPB.pdf
-  def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet): (INDArray, Seq[Double]) = {
+  def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet): (INDArray, Seq[Float]) = {
 
     @tailrec
-    def helperOptimizer( prevWeights:INDArray, losses: Seq[Double], batch: Int): (INDArray, Seq[Double]) = {
+    def helperOptimizer( prevWeights:INDArray, losses: Seq[Float], batch: Int): (INDArray, Seq[Float]) = {
       val sampleDataSet = dataSet.sample(batchSize, withReplacement)
       val eta = 1.0 / lambda / batch
       val weights = prevWeights * (1 - lambda * eta)  -
@@ -35,7 +35,7 @@ class PegasosSGD(
       else
         helperOptimizer(weights, losses :+ currentLoss, batch + 1)}
 
-    helperOptimizer(initWeights, Seq[Double](), 1)
+    helperOptimizer(initWeights, Seq[Float](), 1)
 
   }
 

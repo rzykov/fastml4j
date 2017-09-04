@@ -11,6 +11,8 @@ import org.scalatest._
 import math.random
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
+import fastml4j.util.Implicits._
+
 
 class OLSSuite extends FunSuite with BeforeAndAfter {
 
@@ -20,11 +22,11 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val weights = Array(0.2, 0.7, 0.9)
 
     val loss = new OLSLoss(0)
-    assert( loss.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 18.6 +- 0.01)
-    assert( loss.loss(weights.toNDArray, new DataSet((trainData ++ trainData).toNDArray, (labels ++ labels).toNDArray)) === 18.6 +- 0.01)
+    assert( loss.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 18.6f +- 0.01f)
+    assert( loss.loss(weights.toNDArray, new DataSet((trainData ++ trainData).toNDArray, (labels ++ labels).toNDArray)) === 18.6f +- 0.01f)
 
     val loss2 = new OLSLoss(1)
-    assert( loss2.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 19.27 +- 0.01)}
+    assert( loss2.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 19.27f +- 0.01f)}
 
   test("OLSLoss: gradient") {
 
@@ -33,16 +35,16 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val weights2 = Array(0.2, 0.7, 0.9).toNDArray
 
     val loss2 = new OLSLoss(0)
-    assert(loss2.numericGradient(weights2, new DataSet(trainData2, labels2), 1E-3).sumT[Double] ===
-      loss2.gradient(weights2, new DataSet(trainData2, labels2)).sumT[Double] +- 0.3)
+    assert(loss2.numericGradient(weights2, new DataSet(trainData2, labels2), 1E-3f).sumT ===
+      loss2.gradient(weights2, new DataSet(trainData2, labels2)).sumT +- 0.3f)
 
     val trainData = Array[Array[Double]](Array(-1.0,2.0,3.0),Array(-4.0,5.0,6.0), Array(-2.0,5.0,4.0)).toNDArray
     val labels = Array(Array(-1.0), Array(1.0), Array(1.0)).toNDArray
     val weights = Array[Double](0.2, 0.7, 0.9).toNDArray
 
     val loss = new OLSLoss(0)
-    assert(loss.numericGradient(weights, new DataSet(trainData, labels), 1E-3).sumT[Double] ===
-      loss.gradient(weights, new DataSet(trainData, labels)).sumT[Double] +- 0.3)
+    assert(loss.numericGradient(weights, new DataSet(trainData, labels), 1E-3f).sumT[Float] ===
+      loss.gradient(weights, new DataSet(trainData, labels)).sumT[Float] +- 0.3f)
   }
 
   test("OLSLoss: gradient random") {
@@ -61,11 +63,11 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
 
     val loss2 = new OLSLoss(0)
 
-    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT[Double],
-      loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT[Double])}
+    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT,
+      loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT)}
       .map{ case(grad, nGrad ) => (grad - nGrad)/grad  }
 
-    assert( (gradients.sum / gradients.size) < 0.05)
+    assert( (gradients.sum / gradients.size) < 0.05f)
   }
 
 }

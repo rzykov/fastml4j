@@ -13,15 +13,15 @@ import scala.annotation.tailrec
   */
 class GradientDescent(
   val maxIterations: Int,
-  val stepSize: Double,
-  val eps: Double = 1e-6) extends Optimizer {
+  val stepSize: Float,
+  val eps: Float = 1e-6f) extends Optimizer {
 
 
   override def optimize(loss: Loss, initWeights: INDArray, dataset: DataSet)
-    : (INDArray, Seq[Double]) = {
+    : (INDArray, Seq[Float]) = {
 
     @tailrec
-    def helperOptimizer( prevWeights:INDArray, losses: Seq[Double]): (INDArray, Seq[Double]) = {
+    def helperOptimizer( prevWeights:INDArray, losses: Seq[Float]): (INDArray, Seq[Float]) = {
       val weights = prevWeights - loss.gradient(prevWeights, dataset) * stepSize
       val currentLoss = loss.loss(weights, dataset)
 
@@ -30,7 +30,7 @@ class GradientDescent(
       else
         helperOptimizer(weights, losses :+ currentLoss)}
 
-    helperOptimizer(initWeights, Seq[Double]())
+    helperOptimizer(initWeights, Seq[Float]())
   }
 
 }

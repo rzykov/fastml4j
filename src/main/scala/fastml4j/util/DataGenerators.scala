@@ -3,6 +3,7 @@ package fastml4j.util
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4s.Implicits._
+import fastml4j.util.Implicits._
 
 import scala.util.Random
 
@@ -21,20 +22,20 @@ object DataGenerators {
     * @return Seq of input.
     */
   def generateLinearInput(
-    intercept: Double,
-    weights: Array[Double],
-    xMean: Array[Double],
-    xVariance: Array[Double],
+    intercept: Float,
+    weights: Array[Float],
+    xMean: Array[Float],
+    xVariance: Array[Float],
     nPoints: Int,
     seed: Int,
-    eps: Double): DataSet = {
+    eps: Float): DataSet = {
 
     val rnd = new Random(seed)
-    def rndElement(i: Int) = {(rnd.nextDouble() - 0.5) * math.sqrt(12.0 * xVariance(i)) + xMean(i)}
+    def rndElement(i: Int) = {(rnd.nextFloat() - 0.5f) * math.sqrt(12.0f * xVariance(i)) + xMean(i)}
 
     val seq = (0 until nPoints).map { _ =>
       val features = weights.indices.map ( rndElement ).toNDArray
-      val label = (weights.toNDArray dot features.T).sumT[Double] + intercept + eps * rnd.nextGaussian()
+      val label = (weights.toNDArray dot features.T).sumT + intercept + eps * rnd.nextGaussian()
       (label, features) }
       .toArray
 
@@ -47,19 +48,19 @@ object DataGenerators {
 
   //taken from Spark test
   def generateLogisticInput(
-    offset: Double,
-    scale: Double,
+    offset: Float,
+    scale: Float,
     nPoints: Int,
-    seed: Int): (Array[Array[Double]], Array[Array[Double]]) = {
+    seed: Int): (Array[Array[Float]], Array[Array[Float]]) = {
     val rnd = new Random(seed)
-    val x1 = Array.fill[Double](nPoints)(rnd.nextGaussian())
+    val x1 = Array.fill[Float](nPoints)(rnd.nextGaussian().toFloat)
 
     val y = (0 until nPoints).map { i =>
       val p = 1.0 / (1.0 + math.exp(-(offset + scale * x1(i))))
-      if (rnd.nextDouble() < p) Array(1.0) else Array(0.0)}
+      if (rnd.nextFloat() < p) Array(1.0f) else Array(0.0f)}
       .toArray
 
-    val features = x1.map(Array(_, 1.0))
+    val features = x1.map(Array(_, 1.0f))
     (features, y)
   }
 }

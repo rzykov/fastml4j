@@ -5,6 +5,8 @@ package fastml4j.optimize
   */
 import fastml4j.losses.{LogisticLoss, OLSLoss}
 import fastml4j.optimizer.{GradientDescent, PegasosSGD}
+import fastml4j.util.Implicits._
+
 import org.scalatest._
 import org.scalatest.Matchers._
 import org.nd4s.Implicits._
@@ -12,56 +14,57 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 
+
 import scala.util.Random
 
 
 class OptimizeSuite extends FunSuite with BeforeAndAfter {
 
   test("Gradient descent") {
-    val coef1 = 2.0
-    val coef2 = 1.0
+    val coef1 = 2.0f
+    val coef2 = 1.0f
 
     val data = (1 to 1000).map(Array(_,1.0)).toArray
     val out = data.map{ case Array(a, b) => coef1 * a + coef2 * b + math.random / 10 }
 
     val ols = new OLSLoss(0)
-    val optimizer = new GradientDescent(maxIterations = 1000, stepSize = 0.000005, eps = 1e-4)
+    val optimizer = new GradientDescent(maxIterations = 1000, stepSize = 0.000005f, eps = 1e-4f)
     val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, new DataSet(data.toNDArray, out.toNDArray))
 
-    assert(weights.getDouble(0,0) === coef1 +- 1)
-    assert(weights.getDouble(0,1) === coef2 +- 1)
+    assert(weights.getFloat(0,0) === coef1 +- 1)
+    assert(weights.getFloat(0,1) === coef2 +- 1)
   }
 
   //taken from Spark test
   def generateLogisticInput(
-    offset: Double,
-    scale: Double,
+    offset: Float,
+    scale: Float,
     nPoints: Int,
-    seed: Int): (Array[Array[Double]], Array[Array[Double]]) = {
+    seed: Int): (Array[Array[Float]], Array[Array[Float]]) = {
     val rnd = new Random(seed)
-    val x1 = Array.fill[Double](nPoints)(rnd.nextGaussian())
+    val x1 = Array.fill[Float](nPoints)(rnd.nextGaussian() toFloat)
 
     val y = (0 until nPoints).map { i =>
       val p = 1.0 / (1.0 + math.exp(-(offset + scale * x1(i))))
-      if (rnd.nextDouble() < p) Array(1.0) else Array(0.0)}
+      if (rnd.nextFloat() < p) Array(1.0f) else Array(0.0f)}
       .toArray
 
-    val features = x1.map(Array(_, 1.0))
+    val features = x1.map(Array(_, 1.0f))
     (features, y)
   }
 
   test("Pegasos SGD") {
-    val coef = 3.0
-    val intercept = 1.0
+    val coef = 3.0f
+    val intercept = 1.0f
     val samples = 1000
 
     val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
 
     val ols = new LogisticLoss(0)
-    val optimizer = new PegasosSGD(maxIterations = 1000, lambda = 0.01, eps = 1e-4)
+    val optimizer = new PegasosSGD(maxIterations = 1000, lambda = 0.01f, eps = 1e-4f)
     val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, new DataSet(points.toNDArray, labels.toNDArray))
 
-    assert(weights.getDouble(0,0) === coef +- 1)
-    assert(weights.getDouble(0,1) === intercept +- 1)
+    assert(weights.getFloat(0,0) === coef +- 1)
+    assert(weights.getFloat(0,1) === intercept +- 1)
   }
 }

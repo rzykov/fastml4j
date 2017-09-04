@@ -6,7 +6,7 @@ import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.BooleanIndexing
 import org.nd4j.linalg.indexing.conditions.Conditions
-
+import fastml4j.util.Implicits._
 
 
 /**
@@ -14,13 +14,13 @@ import org.nd4j.linalg.indexing.conditions.Conditions
   */
 
 
-class OLSLoss(lambdaL2: Double) extends Loss {
+class OLSLoss(lambdaL2: Float) extends Loss {
 
-  def loss(weights: INDArray, dataSet: DataSet): Double = {
+  def loss(weights: INDArray, dataSet: DataSet): Float = {
     val predictedVsActual = (weights dot dataSet.getFeatures.T) - dataSet.getLabels.T
-    val regularized: Double =  (weights * weights).sumT[Double] * lambdaL2 / 2
+    val regularized: Float =  (weights * weights).sumT * lambdaL2 / 2
 
-    (predictedVsActual.T * predictedVsActual).sumT[Double] / 2.0 / (dataSet.numExamples)  + regularized
+    (predictedVsActual.T * predictedVsActual).sumT / 2.0f / (dataSet.numExamples)  + regularized
   }
 
   def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
