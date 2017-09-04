@@ -19,7 +19,7 @@ class HingeLoss(lambdaL2: Float) extends Loss {
   //http://www1.inf.tu-dresden.de/~ds24/lehre/ml_ws_2013/ml_11_hinge.pdf
 
   def pureLoss(weights: INDArray, dataSet: DataSet): INDArray = {
-    val out = 1f + ((dataSet.getFeatureMatrix dot weights.T) * dataSet.getLabels.T).neg()
+    val out = 1 + ((dataSet.getFeatureMatrix dot weights.T) * dataSet.getLabels.T).neg()
     BooleanIndexing.replaceWhere(out, 0.0f, Conditions.lessThan(0.0f)) // condition 1-yt<0
     out.T
   } //max(0,1-y*yhat)

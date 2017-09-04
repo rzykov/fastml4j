@@ -32,7 +32,7 @@ object Implicits  {
     def *(indArray: INDArray): INDArray = indArray * value
   }
 
-  implicit class LongWithIndarray(value: Int)  {
+  implicit class LongWithIndarray(value: Long)  {
     def +(indArray: INDArray): INDArray = indArray + value
     def -(indArray: INDArray): INDArray = indArray - value
     def *(indArray: INDArray): INDArray = indArray * value
