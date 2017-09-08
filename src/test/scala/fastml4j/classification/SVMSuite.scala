@@ -11,6 +11,7 @@ import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
+import fastml4j.util.DataGenerators.generateLogisticInput
 
 import math.random
 import scala.util.Random
@@ -20,24 +21,6 @@ import scala.util.Random
   * Created by rzykov on 01/07/17.
   */
 class SVMSuite extends FunSuite with BeforeAndAfter  {
-
-  //taken from Spark test
-  def generateLogisticInput(
-    offset: Float,
-    scale: Float,
-    nPoints: Int,
-    seed: Int): (Array[Array[Float]], Array[Array[Float]]) = {
-    val rnd = new Random(seed)
-    val x1 = Array.fill[Float](nPoints)(rnd.nextGaussian().toFloat)
-
-    val y = (0 until nPoints).map { i =>
-      val p = 1.0f / (1.0f + math.exp(-(offset + scale * x1(i))))
-      if (rnd.nextFloat() < p) Array(1.0f) else Array(-1.0f)}
-      .toArray
-
-    val features = x1.map(Array(_, 1.0f))
-    (features, y)
-  }
 
   test("simple synthetic test") {
     val coef = 3.0f

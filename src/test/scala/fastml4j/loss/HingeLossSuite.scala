@@ -18,7 +18,7 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
 
   test("HingeLoss: one sample test") {
     val trainData = Array(Array(-1.0, 2.0, 3.0)).toNDArray
-    val labels = Array(Array(-1.0)).toNDArray
+    val labels = Array(Array(0.0)).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
 
     val loss = new HingeLoss(0)
@@ -26,20 +26,9 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
     assert(loss.gradient(weights, new DataSet(trainData, labels)) == Array(Array(-1.0,2.0,3.0)).toNDArray)
   }
 
-  test("Hinge Loss: test"){
-    //https://stats.stackexchange.com/questions/4608/gradient-of-hinge-loss
-    val trainData:Array[Array[Float]] = Array(Array(0,1),Array(1,2),Array(3,0),Array(4,1),Array(1,1))
-    val labels = Array(1,1,-1,-1,-1).map(Array(_)).toNDArray
-    val weights = Array(-0.326, 0.226).toNDArray
-    val loss = new HingeLoss(0)
-    println(loss.loss(weights, new DataSet(trainData.toNDArray, labels)))
-    println(loss.gradient(weights, new DataSet(trainData.toNDArray, labels)))
-
-  }
-
  test("HingeLoss: Loss") {
     val trainData = Array(Array(-1,2,3),Array(-4,5,6)).toNDArray
-    val labels = Array(Array(-1), Array(1)).toNDArray
+    val labels = Array(Array(0), Array(1)).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
 
     val loss = new HingeLoss(0)
@@ -54,7 +43,7 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
                                               a = random * 10 - 5
                                               b = random * 100 - 50} yield Array(a.toFloat ,b.toFloat, 1.0f)
 
-    val labels = trainData.map{ case Array(a, b, c) => if (a > b )  Array(1.0f) else Array(-1.0f) }
+    val labels = trainData.map{ case Array(a, b, c) => if (a > b )  Array(1.0f) else Array(0.0f) }
     val weights: Seq[Array[Float]] =  (1 to 100).map{ _ => Array(random *10 - 5 toFloat, random * 2 toFloat, random - 0.5 toFloat ) }
     val loss2 = new HingeLoss(0)
 

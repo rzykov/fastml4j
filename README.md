@@ -9,17 +9,19 @@ Done:
 * Implicit expressions for nd4j
 * Regression metrics
 * Migrate to Float 
+* Port Hinge loss from {1, -1} to {0, 1}
+
 
 TODO:
 
-* Port Hinge loss from {1, -1} to {0, 1}
-* [Bug] Delete intercept from regulairsation
+* [Bug] Delete intercept from regularisation
+* Move L2 regularisation to optimizer and trait
 * Write good tests for linear regression
 * Stohastic gradient descent (with replacement and not)
-* L1 and L2 regularisation put in traits
 * Decision tree
 * Write documentation in code
 * Boosting: Ada Boost
 * Bagging: Random forest
 * Gradient boosting trees
 * PCA
+* L1  regularisation? 
