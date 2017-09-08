@@ -13,6 +13,7 @@ Done:
 TODO:
 
 * Port Hinge loss from {1, -1} to {0, 1}
+* [Bug] Delete intercept from regulairsation
 * Write good tests for linear regression
 * Stohastic gradient descent (with replacement and not)
 * L1 and L2 regularisation put in traits
