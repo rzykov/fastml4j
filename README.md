@@ -14,6 +14,7 @@ Done:
 
 TODO:
 
+* Add Normalisation + revert as a default option https://github.com/deeplearning4j/nd4j/blob/master/nd4j-backends/nd4j-api-parent/nd4j-api/src/main/java/org/nd4j/linalg/dataset/api/preprocessor/AbstractDataSetNormalizer.java
 * [Bug] Delete intercept from regularisation
 * Move L2 regularisation to optimizer and trait
 * Write good tests for linear regression
