@@ -16,6 +16,7 @@ TODO:
 
 * Analyse possibility to move nd4s into implicits directly 
 * [Bug] Delete intercept from regularisation
+* Add Normalisation https://github.com/deeplearning4j/nd4j/blob/master/nd4j-backends/nd4j-api-parent/nd4j-api/src/main/java/org/nd4j/linalg/dataset/api/preprocessor/AbstractDataSetNormalizer.java
 * Write good tests for linear regression
 * Stohastic gradient descent (with replacement and not)
 * Decision tree
