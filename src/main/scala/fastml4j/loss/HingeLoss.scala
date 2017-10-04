@@ -1,4 +1,4 @@
-package fastml4j.losses
+package fastml4j.loss
 
 
 import org.nd4j.linalg.api.ndarray.INDArray
@@ -14,8 +14,7 @@ import fastml4j.util.Implicits._
   */
 
 
-class HingeLoss(lambdaL2: Float) extends Loss {
-
+class HingeLoss[T <: Regularisation](regularisation: T = NoRegularisation) extends Loss {
 
   //http://www1.inf.tu-dresden.de/~ds24/lehre/ml_ws_2013/ml_11_hinge.pdf
   // Our loss function with {0, 1} labels is max(0, 1 - (2y - 1) (f_w(x)))
@@ -29,25 +28,17 @@ class HingeLoss(lambdaL2: Float) extends Loss {
     out.T
   } //max(0,1-y*yhat)
 
-
-  def loss(weights: INDArray, dataSet: DataSet): Float = {
+  override def loss(weights: INDArray, dataSet: DataSet): Float = {
     val scoreArr = pureLoss(weights, dataSet)
-    val main: Float = scoreArr.sumT
-    val regularized: Float =   (weights * weights).sumT * lambdaL2 / 2
-
-    (main / dataSet.numExamples) + regularized
+    scoreArr.sumT / dataSet.numExamples  + regularisation.lossRegularisation(weights)
   }
 
-
-  def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
+  override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
     val mask = pureLoss(weights, dataSet)
     BooleanIndexing.replaceWhere(mask, 1.0f, Conditions.greaterThan(0.0f)) //condition yt<1
 
     val main = - (dataSet.getFeatureMatrix muliColumnVector (labelScaled(dataSet.getLabels).T * mask).T).sum(0)
-    val regularized = weights * lambdaL2
-
-    (main / dataSet.numExamples + regularized)
+    main / dataSet.numExamples + regularisation.gradientRegularisation(weights)
   }
-
 }
 

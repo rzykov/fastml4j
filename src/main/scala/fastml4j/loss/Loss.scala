@@ -1,5 +1,5 @@
 
-package fastml4j.losses
+package fastml4j.loss
 
 import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
@@ -8,8 +8,8 @@ import org.nd4j.linalg.factory.Nd4j
 
 
 abstract class Loss{
-  protected var lambdaL2: Float = 0
-  protected var lambdaL1: Float = 0
+
+  def regularisationFactor: Float = 0
 
   def loss(weights: INDArray, dataSet: DataSet): Float
   def gradient(weights: INDArray,dataSet: DataSet): INDArray

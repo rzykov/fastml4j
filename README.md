@@ -10,12 +10,12 @@ Done:
 * Regression metrics
 * Migrate to Float 
 * Port Hinge loss from {1, -1} to {0, 1}
-
+* Move L2 regularisation to trait
 
 TODO:
 
+* Analyse possibility to move nd4s into implicits directly 
 * [Bug] Delete intercept from regularisation
-* Move L2 regularisation to optimizer and trait
 * Write good tests for linear regression
 * Stohastic gradient descent (with replacement and not)
 * Decision tree

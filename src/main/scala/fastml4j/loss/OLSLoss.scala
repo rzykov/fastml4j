@@ -1,4 +1,4 @@
-package fastml4j.losses
+package fastml4j.loss
 
 import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
@@ -14,20 +14,19 @@ import fastml4j.util.Implicits._
   */
 
 
-class OLSLoss(lambdaL2: Float) extends Loss {
+class OLSLoss[T <: Regularisation](regularisation: T) extends Loss {
 
-  def loss(weights: INDArray, dataSet: DataSet): Float = {
+  override def loss(weights: INDArray, dataSet: DataSet): Float = {
     val predictedVsActual = (weights dot dataSet.getFeatures.T) - dataSet.getLabels.T
-    val regularized: Float =  (weights * weights).sumT * lambdaL2 / 2
 
-    (predictedVsActual.T * predictedVsActual).sumT / 2.0f / (dataSet.numExamples)  + regularized
+    (predictedVsActual.T * predictedVsActual).sumT / 2.0f / (dataSet.numExamples)  +
+      regularisation.lossRegularisation(weights)
   }
 
-  def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
+  override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
     val main = dataSet.getFeatures.T dot ((dataSet.getFeatures dot weights.T) - dataSet.getLabels.T)
-    val regularized = weights * lambdaL2
 
-    (main / (dataSet.getFeatures.rows)).T + regularized
+    (main / (dataSet.getFeatures.rows)).T + regularisation.gradientRegularisation(weights)
   }
 
 }

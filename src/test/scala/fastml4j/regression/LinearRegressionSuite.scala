@@ -21,7 +21,7 @@ class LinearRegressionSuite extends FunSuite with BeforeAndAfter {
     val y = x.map {case Array(x1, x2) => Array(x1 * coef1 + x2 * coef2 + math.random/10) }
     val dataSet = new DataSet(x.toNDArray, y.toNDArray)
 
-    val lr = new LinearRegression(lambdaL2 = 0.0f, alpha = 0.000001f, eps = 1e-4f, maxIterations = 2000)
+    val lr = new LinearRegression(regularisationFactor = 0.0f, alpha = 0.000001f, eps = 1e-4f, maxIterations = 2000)
     lr.fit(dataSet)
 
     val weights = lr.weights

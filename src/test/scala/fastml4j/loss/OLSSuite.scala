@@ -3,7 +3,6 @@ package fastml4j.loss
 /**
   * Created by rzykov on 25/06/17.
   */
-import fastml4j.losses.{HingeLoss, OLSLoss}
 import org.nd4s.Implicits._
 import org.scalatest.Matchers._
 import org.scalatest._
@@ -21,11 +20,11 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val labels = Array(Array(-1), Array(1))
     val weights = Array(0.2, 0.7, 0.9)
 
-    val loss = new OLSLoss(0)
+    val loss = new OLSLoss(NoRegularisation)
     assert( loss.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 18.6f +- 0.01f)
     assert( loss.loss(weights.toNDArray, new DataSet((trainData ++ trainData).toNDArray, (labels ++ labels).toNDArray)) === 18.6f +- 0.01f)
 
-    val loss2 = new OLSLoss(1)
+    val loss2 = new OLSLoss(L2(1))
     assert( loss2.loss(weights.toNDArray, new DataSet(trainData.toNDArray, labels.toNDArray)) === 19.27f +- 0.01f)}
 
   test("OLSLoss: gradient") {
@@ -34,7 +33,7 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val labels2 = Array(Array(-1), Array(1)).toNDArray
     val weights2 = Array(0.2, 0.7, 0.9).toNDArray
 
-    val loss2 = new OLSLoss(0)
+    val loss2 = new OLSLoss(NoRegularisation)
     assert(loss2.numericGradient(weights2, new DataSet(trainData2, labels2), 1E-3f).sumT ===
       loss2.gradient(weights2, new DataSet(trainData2, labels2)).sumT +- 0.3f)
 
@@ -42,7 +41,7 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val labels = Array(Array(-1.0), Array(1.0), Array(1.0)).toNDArray
     val weights = Array[Double](0.2, 0.7, 0.9).toNDArray
 
-    val loss = new OLSLoss(0)
+    val loss = new OLSLoss(NoRegularisation)
     assert(loss.numericGradient(weights, new DataSet(trainData, labels), 1E-3f).sumT[Float] ===
       loss.gradient(weights, new DataSet(trainData, labels)).sumT[Float] +- 0.3f)
   }
@@ -61,7 +60,7 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
 
     val weights: Seq[Array[Double]] =  (1 to 100).map{ _ => Array(random *10 - 5, random * 2, random - 0.5 ) }
 
-    val loss2 = new OLSLoss(0)
+    val loss2 = new OLSLoss(NoRegularisation)
 
     val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT,
       loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT)}

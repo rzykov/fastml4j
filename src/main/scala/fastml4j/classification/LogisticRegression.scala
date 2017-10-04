@@ -8,7 +8,7 @@ import org.nd4s.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import fastml4j.optimizer._
-import fastml4j.losses._
+import fastml4j.loss._
 import fastml4j.util.Implicits._
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.ops.transforms.Transforms
@@ -17,7 +17,7 @@ import org.nd4j.linalg.ops.transforms.Transforms
 /**
   * Created by rzykov on 13/07/17.
   */
-class LogisticRegression(val lambdaL2: Float,
+class LogisticRegression(val regularisationFactor: Float,
   val alpha: Float = 0.01f,
   val maxIterations: Int = 1000,
   val stohasticBatchSize: Int = 100,
@@ -36,10 +36,11 @@ class LogisticRegression(val lambdaL2: Float,
       case _ => throw new Exception("Optimizer %s is not supported".format(optimizerType))
     }
 
-    val (weightsOut, lossesOut) = optimizer.optimize(
-      new LogisticLoss(lambdaL2),
-      initWeights = initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
-      dataset = dataSet)
+    val (weightsOut, lossesOut) =
+      optimizer.optimize(
+        new LogisticLoss(L2(regularisationFactor)),
+        initWeights = initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
+        dataset = dataSet)
 
     weights = weightsOut
     losses = lossesOut

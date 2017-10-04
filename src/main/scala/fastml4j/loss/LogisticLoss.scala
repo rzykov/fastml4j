@@ -1,4 +1,4 @@
-package fastml4j.losses
+package fastml4j.loss
 
 import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
@@ -14,27 +14,25 @@ import org.nd4s.Implicits._
   */
 
 
-class LogisticLoss(lambdaL2: Float) extends Loss {
+class LogisticLoss[T <: Regularisation](regularisation: T = NoRegularisation) extends Loss {
 
   private def sigmoid(weights: INDArray, data: INDArray): INDArray = Transforms.sigmoid(data dot weights.T)
 
   //J = 1/m*sum(dot(-y,log(sigmoid(X*theta)))-dot(1-y,log(1-sigmoid(X*theta))));
-  def loss(weights: INDArray, dataSet: DataSet): Float = {
+  override def loss(weights: INDArray, dataSet: DataSet): Float = {
 
     val sigmoidVec = sigmoid(weights, dataSet.getFeatureMatrix)
     val lossVec = ((dataSet.getLabels.T.neg) dot (Transforms.log(sigmoidVec))) -
       ((1.0f + dataSet.getLabels.T.neg) dot Transforms.log((1.0f + sigmoidVec.neg)))
-    val regularized: Float = (weights * weights).sumT * lambdaL2 / 2
 
-    (lossVec.sumT / dataSet.numExamples) + regularized
+    (lossVec.sumT / dataSet.numExamples) + regularisation.lossRegularisation(weights)
   }
 
   //grad = 1/m*sum((sigmoid(X*theta)-y).*X,1)';
-  def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
+  override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
     val main = ((dataSet.getFeatures.T) dot (sigmoid(weights, dataSet.getFeatures) - dataSet.getLabels))
-    val regularized = weights * lambdaL2
 
-    (main.T) / (dataSet.numExamples) + regularized
+    (main.T) / (dataSet.numExamples) + regularisation.lossRegularisation(weights)
   }
 
 }

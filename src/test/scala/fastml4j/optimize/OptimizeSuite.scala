@@ -3,7 +3,7 @@ package fastml4j.optimize
 /**
   * Created by rzykov on 25/06/17.
   */
-import fastml4j.losses.{LogisticLoss, OLSLoss}
+import fastml4j.loss.{LogisticLoss, OLSLoss, NoRegularisation}
 import fastml4j.optimizer.{GradientDescent, PegasosSGD}
 import fastml4j.util.Implicits._
 
@@ -27,7 +27,7 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
     val data = (1 to 1000).map(Array(_,1.0)).toArray
     val out = data.map{ case Array(a, b) => coef1 * a + coef2 * b + math.random / 10 }
 
-    val ols = new OLSLoss(0)
+    val ols = new OLSLoss(NoRegularisation)
     val optimizer = new GradientDescent(maxIterations = 1000, stepSize = 0.000005f, eps = 1e-4f)
     val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, new DataSet(data.toNDArray, out.toNDArray))
 
@@ -60,7 +60,7 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
 
     val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
 
-    val ols = new LogisticLoss(0)
+    val ols = new LogisticLoss(NoRegularisation)
     val optimizer = new PegasosSGD(maxIterations = 1000, lambda = 0.01f, eps = 1e-4f)
     val (weights, losses) = optimizer.optimize(ols, Array(0.0,0.0).toNDArray, new DataSet(points.toNDArray, labels.toNDArray))
 

@@ -4,7 +4,7 @@ package fastml4j.classification
   * Created by rzykov on 25/06/17.
   */
 
-import fastml4j.losses.HingeLoss
+import fastml4j.loss.HingeLoss
 import org.scalatest._
 import org.scalatest.Matchers._
 import org.nd4s.Implicits._
@@ -29,7 +29,7 @@ class SVMSuite extends FunSuite with BeforeAndAfter  {
 
     val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
 
-    val lr = new SVM(lambdaL2 = 0.0f, maxIterations = 10000  ,alpha = 0.001f, eps = 1e-4f)
+    val lr = new SVM(regularisationFactor = 0.0f, maxIterations = 10000  ,alpha = 0.001f, eps = 1e-4f)
     lr.fit(new DataSet(points.toNDArray, labels.toNDArray))
     assert(lr.weights.getFloat(0,0) === coef +- 1)
     assert(lr.weights.getFloat(0,1) === intercept +- 1)
