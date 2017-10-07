@@ -3,12 +3,12 @@ package fastml4j.metric
 import java.util.Random
 
 import fastml4j.regression.LinearRegression
-import org.nd4s.Implicits._
+import fastml4j.util.Implicits._
 import org.scalatest.Matchers._
 import org.scalatest._
 
 import math.random
-import org.nd4s.Implicits._
+
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j

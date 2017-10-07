@@ -7,7 +7,7 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.BooleanIndexing
 import org.nd4j.linalg.indexing.conditions.Conditions
 import org.nd4j.linalg.ops.transforms.Transforms
-import org.nd4s.Implicits._
+//
 
 /**
   * Created by rzykov on 31/05/17.
@@ -25,7 +25,7 @@ class LogisticLoss[T <: Regularisation](regularisation: T = NoRegularisation) ex
     val lossVec = ((dataSet.getLabels.T.neg) dot (Transforms.log(sigmoidVec))) -
       ((1.0f + dataSet.getLabels.T.neg) dot Transforms.log((1.0f + sigmoidVec.neg)))
 
-    (lossVec.sumT / dataSet.numExamples) + regularisation.lossRegularisation(weights)
+    (lossVec.sumFloat / dataSet.numExamples) + regularisation.lossRegularisation(weights)
   }
 
   //grad = 1/m*sum((sigmoid(X*theta)-y).*X,1)';

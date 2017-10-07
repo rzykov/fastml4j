@@ -6,7 +6,7 @@ import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.BooleanIndexing
 import org.nd4j.linalg.indexing.conditions.Conditions
-import org.nd4s.Implicits._
+//
 import fastml4j.util.Implicits._
 
 /**
@@ -30,7 +30,7 @@ class HingeLoss[T <: Regularisation](regularisation: T = NoRegularisation) exten
 
   override def loss(weights: INDArray, dataSet: DataSet): Float = {
     val scoreArr = pureLoss(weights, dataSet)
-    scoreArr.sumT / dataSet.numExamples  + regularisation.lossRegularisation(weights)
+    scoreArr.sumFloat / dataSet.numExamples  + regularisation.lossRegularisation(weights)
   }
 
   override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {

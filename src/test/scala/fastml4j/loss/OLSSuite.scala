@@ -3,7 +3,7 @@ package fastml4j.loss
 /**
   * Created by rzykov on 25/06/17.
   */
-import org.nd4s.Implicits._
+
 import org.scalatest.Matchers._
 import org.scalatest._
 
@@ -34,16 +34,18 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val weights2 = Array(0.2, 0.7, 0.9).toNDArray
 
     val loss2 = new OLSLoss(NoRegularisation)
-    assert(loss2.numericGradient(weights2, new DataSet(trainData2, labels2), 1E-3f).sumT ===
-      loss2.gradient(weights2, new DataSet(trainData2, labels2)).sumT +- 0.3f)
+    assert(loss2.numericGradient(weights2, new DataSet(trainData2, labels2), 1E-3f).sumFloat ===
+      loss2.gradient(weights2, new DataSet(trainData2, labels2)).sumFloat +- 0.3f)
 
     val trainData = Array[Array[Double]](Array(-1.0,2.0,3.0),Array(-4.0,5.0,6.0), Array(-2.0,5.0,4.0)).toNDArray
     val labels = Array(Array(-1.0), Array(1.0), Array(1.0)).toNDArray
     val weights = Array[Double](0.2, 0.7, 0.9).toNDArray
 
     val loss = new OLSLoss(NoRegularisation)
-    assert(loss.numericGradient(weights, new DataSet(trainData, labels), 1E-3f).sumT[Float] ===
-      loss.gradient(weights, new DataSet(trainData, labels)).sumT[Float] +- 0.3f)
+    val lossLeft: Float = loss.numericGradient(weights, new DataSet(trainData, labels), 1E-3f).sumFloat
+    val lossRight: Float = loss.gradient(weights, new DataSet(trainData, labels)).sumFloat
+
+    assert(lossLeft === lossRight +- 0.3f)
   }
 
   test("OLSLoss: gradient random") {
@@ -62,8 +64,8 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
 
     val loss2 = new OLSLoss(NoRegularisation)
 
-    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT,
-      loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumT)}
+    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumFloat,
+      loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumFloat)}
       .map{ case(grad, nGrad ) => (grad - nGrad)/grad  }
 
     assert( (gradients.sum / gradients.size) < 0.05f)

@@ -6,7 +6,7 @@ package fastml4j.loss
 
 import org.scalatest._
 import org.scalatest.Matchers._
-import org.nd4s.Implicits._
+import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
@@ -38,11 +38,11 @@ class LogisticLossSuite extends FunSuite with BeforeAndAfter {
 
     val loss2 = new LogisticLoss(NoRegularisation)
 
-    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toNDArray)).sumT,
-      loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toNDArray)).sumT)}
+    val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toNDArray)).sumFloat,
+      loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toNDArray)).sumFloat)}
       .map{ case(grad, nGrad ) => (grad - nGrad)/grad  }
 
-    assert( (gradients.sum / gradients.size) < 0.05f)
+    assert( (gradients.sum / gradients.size) < 0.1f)
   }
 
 }

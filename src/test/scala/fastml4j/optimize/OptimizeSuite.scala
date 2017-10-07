@@ -6,10 +6,9 @@ package fastml4j.optimize
 import fastml4j.loss.{LogisticLoss, OLSLoss, NoRegularisation}
 import fastml4j.optimizer.{GradientDescent, PegasosSGD}
 import fastml4j.util.Implicits._
-
 import org.scalatest._
 import org.scalatest.Matchers._
-import org.nd4s.Implicits._
+
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j

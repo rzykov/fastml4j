@@ -1,10 +1,11 @@
 package fastml4j.optimizer
 
-import org.nd4s.Implicits._
+
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import fastml4j.loss.Loss
 import org.nd4j.linalg.dataset.DataSet
+import fastml4j.util.Implicits._
 
 import scala.annotation.tailrec
 

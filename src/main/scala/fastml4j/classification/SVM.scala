@@ -1,6 +1,6 @@
 package fastml4j.classification
 
-import org.nd4s.Implicits._
+
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import fastml4j.optimizer._
@@ -44,12 +44,12 @@ class SVM(val regularisationFactor: Float,
   }
 
   def predictClass(inputVector: INDArray): Float = {
-    val sign = math.signum((inputVector dot weights.T).sumT)
+    val sign = math.signum((inputVector dot weights.T).sumFloat)
     if( sign != 0 ) sign.toFloat else 1.0f
   }
 
   def predict(inputVector:  INDArray): Float = {
-    (inputVector dot weights).sumT
+    (inputVector dot weights).sumFloat
   }
 
 }

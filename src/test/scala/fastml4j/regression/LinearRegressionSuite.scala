@@ -1,7 +1,7 @@
 package fastml4j.regression
 
 import org.scalatest._
-import org.nd4s.Implicits._
+import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.scalatest.Matchers._

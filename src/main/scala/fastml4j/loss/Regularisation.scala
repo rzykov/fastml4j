@@ -1,7 +1,7 @@
 package fastml4j.loss
 import org.nd4j.linalg.api.ndarray.INDArray
 import fastml4j.util.Implicits._
-import org.nd4s.Implicits._
+//
 
 sealed trait Regularisation {
   def lossRegularisation(weights: INDArray): Float
@@ -14,7 +14,7 @@ object NoRegularisation extends Regularisation {
 }
 
 class L2(protected val lambdaL2: Float) extends Regularisation {
-  override def lossRegularisation(weights: INDArray): Float = (weights * weights).sumT * lambdaL2 / 2
+  override def lossRegularisation(weights: INDArray): Float = (weights * weights).sumFloat * lambdaL2 / 2
   override def gradientRegularisation(weights: INDArray): INDArray = weights*lambdaL2
 }
 

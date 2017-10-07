@@ -6,7 +6,7 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.ops.transforms.Transforms
-import org.nd4s.Implicits._
+
 import fastml4j.util.Implicits._
 
 
@@ -40,7 +40,7 @@ class LinearRegression(val regularisationFactor: Float,
   }
 
   def predict(inputVector: INDArray): Float = {
-    (inputVector dot weights).sumT
+    (inputVector dot weights).sumFloat
   }
 
   def transform(dataSet: DataSet): INDArray = (weights dot dataSet.getFeatures.T)

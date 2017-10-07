@@ -1,6 +1,6 @@
 package fastml4j.loss
 
-import org.nd4s.Implicits._
+//
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
@@ -19,7 +19,7 @@ class OLSLoss[T <: Regularisation](regularisation: T) extends Loss {
   override def loss(weights: INDArray, dataSet: DataSet): Float = {
     val predictedVsActual = (weights dot dataSet.getFeatures.T) - dataSet.getLabels.T
 
-    (predictedVsActual.T * predictedVsActual).sumT / 2.0f / (dataSet.numExamples)  +
+    (predictedVsActual.T * predictedVsActual).sumFloat / 2.0f / (dataSet.numExamples)  +
       regularisation.lossRegularisation(weights)
   }
 

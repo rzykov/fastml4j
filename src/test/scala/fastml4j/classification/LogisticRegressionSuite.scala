@@ -6,7 +6,7 @@ package fastml4j.classification
 
 import org.scalatest._
 import org.scalatest.Matchers._
-import org.nd4s.Implicits._
+import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
@@ -33,8 +33,8 @@ class LogisticRegressionSuite extends FunSuite with BeforeAndAfter  {
     dataSet.validate()
     val lr = new LogisticRegression(regularisationFactor = 0.0f, maxIterations = 10000  ,alpha = 0.1f, eps = 1e-10f)
     lr.fit(dataSet)
-    assert(lr.weights.getFloat(0,0) === coef +- 1)
-    assert(lr.weights.getFloat(0,1) === intercept +- 1)
+    assert(lr.weights.get(0,0) === coef +- 1)
+    assert(lr.weights.get(0,1) === intercept +- 1)
 
   }
 

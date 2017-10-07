@@ -1,11 +1,11 @@
 
 package fastml4j.loss
 
-import org.nd4s.Implicits._
+
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
-
+import fastml4j.util.Implicits._
 
 abstract class Loss{
 
@@ -22,6 +22,7 @@ abstract class Loss{
         val newWeights = weights.dup.put(0, i, weights.get(0,i) + eps)
 
         (loss(newWeights, dataSet) - loss(oldWeights, dataSet)) / 2.0f / eps }
+      .toArray
       .toNDArray
 
 }

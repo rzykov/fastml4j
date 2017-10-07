@@ -1,10 +1,11 @@
 package fastml4j.optimizer
 
 import fastml4j.loss.Loss
-import org.nd4s.Implicits._
+import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
+
 
 import scala.annotation.tailrec
 
@@ -24,7 +25,7 @@ class PegasosSGD(
     @tailrec
     def helperOptimizer( prevWeights:INDArray, losses: Seq[Float], batch: Int): (INDArray, Seq[Float]) = {
       val sampleDataSet = dataSet.sample(batchSize, withReplacement)
-      val eta = 1.0 / lambda / batch
+      val eta = 1.0f / lambda / batch
       val weights = prevWeights * (1 - lambda * eta)  -
         loss.gradient(prevWeights, sampleDataSet) * eta
 

@@ -2,7 +2,6 @@ package fastml4j.util
 
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
-import org.nd4s.Implicits._
 import fastml4j.util.Implicits._
 
 import scala.util.Random
@@ -34,8 +33,8 @@ object DataGenerators {
     def rndElement(i: Int) = {(rnd.nextFloat() - 0.5f) * math.sqrt(12.0f * xVariance(i)) + xMean(i)}
 
     val seq = (0 until nPoints).map { _ =>
-      val features = weights.indices.map ( rndElement ).toNDArray
-      val label = (weights.toNDArray dot features.T).sumT + intercept + eps * rnd.nextGaussian()
+      val features = weights.indices.map ( rndElement ).toArray.toNDArray
+      val label = (weights.toNDArray dot features.T).sumFloat + intercept + eps * rnd.nextGaussian()
       (label, features) }
       .toArray
 
