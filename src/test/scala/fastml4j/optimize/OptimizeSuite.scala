@@ -24,7 +24,7 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
     val coef2 = 1.0f
 
     val data = (1 to 1000).map(Array(_,1.0)).toArray
-    val out = data.map{ case Array(a, b) => coef1 * a + coef2 * b + math.random / 10 }
+    val out = data.map{ case Array(a, b) => Array(coef1 * a + coef2 * b + math.random / 10) }
 
     val ols = new OLSLoss(NoRegularisation)
     val optimizer = new GradientDescent(maxIterations = 1000, stepSize = 0.000005f, eps = 1e-4f)
