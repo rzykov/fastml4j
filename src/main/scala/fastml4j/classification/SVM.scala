@@ -16,10 +16,8 @@ class SVM(val regularisationFactor: Float,
   val maxIterations: Int = 1000,
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "PegasosSGD",
-  val eps: Float = 1e-6f) extends ClassificationModel {
-
-  var weights: INDArray = Nd4j.zeros(1)
-  var losses: Seq[Float] = Seq[Float]()
+  val eps: Float = 1e-6f,
+  val intercept: Boolean = true) extends ClassificationModel {
 
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
@@ -33,13 +31,13 @@ class SVM(val regularisationFactor: Float,
       case _ => throw new Exception("Optimizer %s is not supported".format(optimizerType))
     }
 
-    val (weightsOut, lossesOut) =
-      optimizer.optimize(
-        new HingeLoss(L2(regularisationFactor)),
+    val (weightsOut, lossesOut) = optimizer.optimize(
+        new HingeLoss(L2(regularisationFactor, intercept)),
         initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
         dataSet)
 
-    weights = weightsOut
+    interceptValue = extractIntercept(weightsOut, intercept)
+    weights = extractWeights(weightsOut, intercept)
     losses = lossesOut
   }
 
@@ -49,7 +47,7 @@ class SVM(val regularisationFactor: Float,
   }
 
   def predict(inputVector:  INDArray): Float = {
-    (inputVector dot weights).sumFloat
+    (inputVector dot weights + interceptValue ).sumFloat
   }
 
 }

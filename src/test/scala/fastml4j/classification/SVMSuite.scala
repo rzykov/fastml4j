@@ -32,7 +32,7 @@ class SVMSuite extends FunSuite with BeforeAndAfter  {
     val lr = new SVM(regularisationFactor = 0.0f, maxIterations = 10000  ,alpha = 0.001f, eps = 1e-4f)
     lr.fit(new DataSet(points.toNDArray, labels.toNDArray))
     assert(lr.weights.get(0,0) === coef +- 1)
-    assert(lr.weights.get(0,1) === intercept +- 1)
+    assert(lr.interceptValue === intercept +- 1)
   }
 
 

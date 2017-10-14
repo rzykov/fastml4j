@@ -19,12 +19,14 @@ class LinearRegression(val regularisationFactor: Float,
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "GradientDescent",
   val eps: Float = 1e-6f,
-  val standardize: Boolean = true) extends RegressionModel {
-
-  var weights: INDArray = Nd4j.zeros(1)
-  var losses: Seq[Float] = Seq[Float]()
+  val standardize: Boolean = true,
+  val intercept: Boolean = true) extends RegressionModel {
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
+
+    dataSet.validate()
+
+    val dataSetIntercept: DataSet = dataSetWithIntercept(dataSet, intercept)
 
     val optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)
@@ -33,9 +35,11 @@ class LinearRegression(val regularisationFactor: Float,
 
     val (weightsOut, lossesOut) = optimizer.optimize(
       new OLSLoss(L2(regularisationFactor)),
-      initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
-      dataSet)
-    weights = weightsOut
+      initWeights.getOrElse(Nd4j.zeros(dataSetIntercept.numInputs)),
+      dataSetIntercept)
+
+    interceptValue = extractIntercept(weightsOut, intercept)
+    weights = extractWeights(weightsOut, intercept)
     losses = lossesOut
   }
 

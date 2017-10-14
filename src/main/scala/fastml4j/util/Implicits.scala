@@ -19,6 +19,18 @@ object Implicits  {
 
   }
 
+  implicit class DataSetWithIntercept(dataSet: DataSet)  {
+    private var hasIntercept: Boolean = false
+    def getIntecept: Boolean =  hasIntercept
+    def addIntercept(): DataSet = {
+      if(hasIntercept) throw new RuntimeException(s"DataSet has already an intercept.")
+      val intercept = Nd4j.ones(dataSet.numExamples(),1)
+      val newDataSet = dataSet.copy()
+      newDataSet.addFeatureVector(intercept)
+      newDataSet
+    }
+  }
+
   implicit class IntWithIndarray(value: Int)  {
     def +(indArray: INDArray): INDArray = indArray.add(value)
     def -(indArray: INDArray): INDArray = indArray.sub(value)
