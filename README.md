@@ -12,11 +12,11 @@ Done:
 * Port Hinge loss from {1, -1} to {0, 1}
 * Move L2 regularisation to trait
 * Got rid of nd4s, implement own implicits directly 
+* Migrated to 0.9.1 of nd4j
 
 
 TODO:
 
-* Migrate to 0.9.1 or 0.9.2 of nd4j
 * [Bug] Delete intercept from regularisation
 * Add Normalisation https://github.com/deeplearning4j/nd4j/blob/master/nd4j-backends/nd4j-api-parent/nd4j-api/src/main/java/org/nd4j/linalg/dataset/api/preprocessor/AbstractDataSetNormalizer.java
 * Write good tests for linear regression

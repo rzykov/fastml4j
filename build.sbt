@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 assemblySettings
 
-organization := "ru.retailrocket.spark"
+organization := "org.github.rzykov.fastml4j"
 
 name := "fastml4j"
 
