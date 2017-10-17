@@ -22,21 +22,21 @@ import util.Random
 class LogisticRegressionSuite extends FunSuite with BeforeAndAfter  {
 
 
-
   test("simple synthetic test") {
-    val coef = 3.0f
-    val intercept = 1.0f
+    //TODO: rewrite it!!
+    val coef = 1.0f
+    val intercept = 0.5f
     val samples = 100
-
     val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
     val dataSet = new DataSet(points.toNDArray, labels.toNDArray)
     dataSet.validate()
-    val lr = new LogisticRegression(regularisationFactor = 0.0f, maxIterations = 10000  ,alpha = 0.1f, eps = 1e-10f)
+    val lr = new LogisticRegression(lambdaL2 = 0.0f, maxIterations = 10000  ,alpha = 0.1f, eps = 1e-10f, intercept = false)
     lr.fit(dataSet)
+    println(lr.weights)
+    println(lr.interceptValue)
+
     assert(lr.weights.get(0,0) === coef +- 1)
     assert(lr.weights.get(0,1) === intercept +- 1)
-
   }
-
 
 }

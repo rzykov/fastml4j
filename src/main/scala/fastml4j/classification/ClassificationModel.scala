@@ -10,12 +10,9 @@ import fastml4j.util.Intercept
 /**
   * Created by rzykov on 23/06/17.
   */
-abstract class ClassificationModel extends Intercept{
-
+abstract class ClassificationModel{
   var weights: INDArray = Nd4j.zeros(1)
-  var interceptValue: Float = 0
   var losses: Seq[Float] = Seq[Float]()
-
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray]): Unit
 

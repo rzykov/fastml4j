@@ -14,7 +14,7 @@ import org.nd4j.linalg.ops.transforms.Transforms
   */
 
 
-class LogisticLoss[T <: Regularisation](regularisation: T = NoRegularisation) extends Loss {
+class LogisticLoss extends Loss {
 
   private def sigmoid(weights: INDArray, data: INDArray): INDArray = Transforms.sigmoid(data dot weights.T)
 
@@ -25,14 +25,14 @@ class LogisticLoss[T <: Regularisation](regularisation: T = NoRegularisation) ex
     val lossVec = ((dataSet.getLabels.T.neg) dot (Transforms.log(sigmoidVec))) -
       ((1.0f + dataSet.getLabels.T.neg) dot Transforms.log((1.0f + sigmoidVec.neg)))
 
-    (lossVec.sumFloat / dataSet.numExamples) + regularisation.lossRegularisation(weights)
+    (lossVec.sumFloat / dataSet.numExamples)
   }
 
   //grad = 1/m*sum((sigmoid(X*theta)-y).*X,1)';
   override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
     val main = ((dataSet.getFeatures.T) dot (sigmoid(weights, dataSet.getFeatures) - dataSet.getLabels))
 
-    (main.T) / (dataSet.numExamples) + regularisation.lossRegularisation(weights)
+    (main.T) / (dataSet.numExamples)
   }
 
 }

@@ -22,7 +22,7 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
     val labels = Array(Array(0.0)).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
 
-    val loss = new HingeLoss(NoRegularisation)
+    val loss = new HingeLoss
     assert(loss.loss(weights, new DataSet(trainData, labels)) === 4.9f +- 0.01f)
     assert(loss.gradient(weights, new DataSet(trainData, labels)) == Array(Array(-1.0,2.0,3.0)).toNDArray)
   }
@@ -32,11 +32,9 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
     val labels = Array(Array(0), Array(1)).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
 
-    val loss = new HingeLoss(NoRegularisation)
+    val loss = new HingeLoss
     assert(loss.loss(weights, new DataSet(trainData, labels)) === 2.45f +- 0.01f)
-
-    val loss2 = new HingeLoss(L2(1))
-    assert(loss2.loss(weights, new DataSet(trainData, labels)) === 3.11f +- 0.01f)}
+}
 
   test("HingeLoss: gradient random") {
     val samples = 1000
@@ -46,7 +44,7 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
 
     val labels = trainData.map{ case Array(a, b, c) => if (a > b )  Array(1.0f) else Array(0.0f) }
     val weights: Seq[Array[Float]] =  (1 to 100).map{ _ => Array(random *10 - 5 toFloat, random * 2 toFloat, random - 0.5 toFloat ) }
-    val loss2 = new HingeLoss(NoRegularisation)
+    val loss2 = new HingeLoss
 
     val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumFloat,
       loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumFloat)}

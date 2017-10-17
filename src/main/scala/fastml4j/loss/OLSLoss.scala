@@ -14,20 +14,17 @@ import fastml4j.util.Implicits._
   */
 
 
-class OLSLoss[T <: Regularisation](regularisation: T) extends Loss {
+class OLSLoss extends Loss {
 
   override def loss(weights: INDArray, dataSet: DataSet): Float = {
     val predictedVsActual = (weights dot dataSet.getFeatures.T) - dataSet.getLabels.T
 
-    (predictedVsActual * predictedVsActual).sumFloat / 2.0f / (dataSet.numExamples)  +
-      regularisation.lossRegularisation(weights)
+    (predictedVsActual * predictedVsActual).sumFloat / 2.0f / (dataSet.numExamples)
   }
 
   override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
-
     val main =((dataSet.getFeatures dot weights.T) - dataSet.getLabels.T) dot  dataSet.getFeatures
-
-    (main / (dataSet.getFeatures.rows)) + regularisation.gradientRegularisation(weights)
+    (main / (dataSet.getFeatures.rows))
   }
 
 }

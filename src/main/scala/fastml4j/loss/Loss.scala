@@ -9,8 +9,6 @@ import fastml4j.util.Implicits._
 
 abstract class Loss{
 
-  def regularisationFactor: Float = 0
-
   def loss(weights: INDArray, dataSet: DataSet): Float
   def gradient(weights: INDArray,dataSet: DataSet): INDArray
 

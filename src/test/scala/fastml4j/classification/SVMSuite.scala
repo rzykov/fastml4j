@@ -29,7 +29,7 @@ class SVMSuite extends FunSuite with BeforeAndAfter  {
 
     val (points, labels) = generateLogisticInput(intercept, coef, samples, 100)
 
-    val lr = new SVM(regularisationFactor = 0.0f, maxIterations = 10000  ,alpha = 0.001f, eps = 1e-4f)
+    val lr = new SVM(lambdaL2 = 0.0f, maxIterations = 10000  ,alpha = 0.001f, eps = 1e-4f)
     lr.fit(new DataSet(points.toNDArray, labels.toNDArray))
     assert(lr.weights.get(0,0) === coef +- 1)
     assert(lr.interceptValue === intercept +- 1)

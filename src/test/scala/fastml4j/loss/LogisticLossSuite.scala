@@ -22,7 +22,7 @@ class LogisticLossSuite extends FunSuite with BeforeAndAfter {
     val labels = Array(Array(1.0)).toNDArray
     val weights = Array(0.2, 0.7, 0.9).toNDArray
 
-    val loss = new LogisticLoss(NoRegularisation)
+    val loss = new LogisticLoss
     assert( loss.loss(weights, new DataSet(trainData, labels)) === 0.12f +- 0.01f)}
 
   test("LogisticLoss: gradient checking by random") {
@@ -36,7 +36,7 @@ class LogisticLossSuite extends FunSuite with BeforeAndAfter {
 
     val weights: Seq[Array[Double]] =  (1 to 10).map{ _ => Array(random *2 - 2, random , random - 0.5 ) }
 
-    val loss2 = new LogisticLoss(NoRegularisation)
+    val loss2 = new LogisticLoss
 
     val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toNDArray)).sumFloat,
       loss2.numericGradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toNDArray)).sumFloat)}
