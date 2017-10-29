@@ -20,7 +20,7 @@ class RegularisationSuite  extends FunSuite with BeforeAndAfter {
       weights
   }
 
-  private class L2testLoss(override val lambdaL2: Float, override val intercept: Boolean)
+  private class L2testLoss(override val lambdaL2: Float, override val calcIntercept: Boolean)
     extends L2test with L2 with Intercept
 
 

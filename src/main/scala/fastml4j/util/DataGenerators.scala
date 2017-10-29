@@ -39,27 +39,27 @@ object DataGenerators {
       .toArray
 
     val features = Nd4j.vstack(seq.map(_._2):_*)
-//    val featuresWithIntercept =
     val labels = seq.map(_._1).map(Array(_)).toNDArray
 
     new DataSet(features, labels)
   }
 
-  //taken from Spark test
+  //from Spark test
   def generateLogisticInput(
     offset: Float,
-    scale: Float,
+    weights: Array[Float],
     nPoints: Int,
     seed: Int): (Array[Array[Float]], Array[Array[Float]]) = {
-    val rnd = new Random(seed)
-    val x1 = Array.fill[Float](nPoints)(rnd.nextGaussian().toFloat)
+    val rnd = new util.Random(seed)
+    val features = Array.fill[Array[Float]](nPoints)(weights.map(_ => rnd.nextGaussian().toFloat))
+    val xWeighted = features.map{ featuresArr => featuresArr.zip(weights).map{case(x,y) => x*y}.sum}
 
     val y = (0 until nPoints).map { i =>
-      val p = 1.0 / (1.0 + math.exp(-(offset + scale * x1(i))))
+      val p = 1.0 / (1.0 + math.exp(-(offset + xWeighted(i))))
       if (rnd.nextFloat() < p) Array(1.0f) else Array(0.0f)}
       .toArray
 
-    val features = x1.map(Array(_, 1.0f))
     (features, y)
   }
+
 }

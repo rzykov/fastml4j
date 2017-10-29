@@ -18,9 +18,9 @@ class SVM(val lambdaL2: Float,
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "PegasosSGD",
   val eps: Float = 1e-6f,
-  val intercept: Boolean = true) extends ClassificationModel with Intercept {
+  val calcIntercept: Boolean = true) extends ClassificationModel with Intercept {
 
-  private class HingeLossL2(override val lambdaL2: Float, override val intercept: Boolean)
+  private class HingeLossL2(override val lambdaL2: Float, override val calcIntercept: Boolean)
     extends HingeLoss with L2 with Intercept
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
@@ -35,11 +35,11 @@ class SVM(val lambdaL2: Float,
     }
 
     val (weightsOut, lossesOut) = optimizer.optimize(
-        new HingeLossL2(lambdaL2, intercept),
+        new HingeLossL2(lambdaL2, calcIntercept),
         initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
         dataSet)
 
-    interceptValue = extractIntercept(weightsOut)
+    intercept = extractIntercept(weightsOut)
     weights = extractWeights(weightsOut)
     losses = lossesOut
   }
@@ -50,7 +50,7 @@ class SVM(val lambdaL2: Float,
   }
 
   def predict(inputVector:  INDArray): Float = {
-    (inputVector dot weights + interceptValue ).sumFloat
+    (inputVector dot weights + intercept ).sumFloat
   }
 
 }

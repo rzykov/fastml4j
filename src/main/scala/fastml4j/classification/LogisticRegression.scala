@@ -26,9 +26,9 @@ class LogisticRegression
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "GradientDescent",
   val eps: Float = 1e-6f,
-  val intercept: Boolean = true) extends ClassificationModel with Intercept {
+  val calcIntercept: Boolean = true) extends ClassificationModel with Intercept {
 
-  private class LogisticLossL2(override val lambdaL2: Float, override val intercept: Boolean)
+  private class LogisticLossL2(override val lambdaL2: Float, override val calcIntercept: Boolean)
     extends HingeLoss with L2 with Intercept
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
@@ -43,11 +43,11 @@ class LogisticRegression
 
     val (weightsOut, lossesOut) =
       optimizer.optimize(
-        new LogisticLossL2(lambdaL2, intercept),
+        new LogisticLossL2(lambdaL2, calcIntercept),
         initWeights = initWeights.getOrElse(Nd4j.zeros(dataSetIntercept.numInputs)),
         dataset = dataSetIntercept)
 
-    interceptValue = extractIntercept(weightsOut)
+    intercept = extractIntercept(weightsOut)
     weights = extractWeights(weightsOut)
     losses = lossesOut
   }
@@ -57,7 +57,7 @@ class LogisticRegression
   }
 
   def predict(inputVector:  INDArray): Float = {
-    Transforms.sigmoid(inputVector dot weights + interceptValue).sumFloat
+    Transforms.sigmoid(inputVector dot weights + intercept).sumFloat
   }
 
 }

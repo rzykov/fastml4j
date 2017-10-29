@@ -21,9 +21,9 @@ class LinearRegression(
   val optimizerType: String = "GradientDescent",
   val eps: Float = 1e-6f,
   val standardize: Boolean = true,
-  val intercept: Boolean = true) extends RegressionModel with Intercept {
+  val calcIntercept: Boolean = true) extends RegressionModel with Intercept {
 
-  private class OLSLossL2 (override val lambdaL2: Float, override val intercept: Boolean)
+  private class OLSLossL2 (override val lambdaL2: Float, override val calcIntercept: Boolean)
     extends OLSLoss with L2 with Intercept
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
@@ -38,11 +38,11 @@ class LinearRegression(
     }
 
     val (weightsOut, lossesOut) = optimizer.optimize(
-      new OLSLossL2(lambdaL2, intercept),
+      new OLSLossL2(lambdaL2, calcIntercept),
       initWeights.getOrElse(Nd4j.zeros(dataSetIntercept.numInputs)),
       dataSetIntercept)
 
-    interceptValue = extractIntercept(weightsOut)
+    intercept = extractIntercept(weightsOut)
     weights = extractWeights(weightsOut)
     losses = lossesOut
   }

@@ -13,7 +13,7 @@ trait L2  extends Loss {
   val lambdaL2: Float
 
   def weightsWithoutIntercept(weights: INDArray): INDArray =
-    if (intercept) {
+    if (calcIntercept) {
       val newWeights = weights.dup()
       newWeights.putScalar(0,  weights.size(1) - 1, 0f) }
     else weights
