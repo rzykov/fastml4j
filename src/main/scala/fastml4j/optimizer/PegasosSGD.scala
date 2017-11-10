@@ -10,6 +10,9 @@ import org.nd4j.linalg.factory.Nd4j
 import scala.annotation.tailrec
 
 /**
+  * Pegasos SGD, useful for hinge loss
+  * http://ttic.uchicago.edu/~nati/Publications/PegasosMPB.pdf
+  *
   * Created by rzykov on 18/07/17.
   */
 class PegasosSGD(
@@ -19,7 +22,6 @@ class PegasosSGD(
   val batchSize: Int = 100,
   val withReplacement: Boolean = true) extends Optimizer {
 
-  //http://ttic.uchicago.edu/~nati/Publications/PegasosMPB.pdf
   def optimize(loss: Loss, initWeights: INDArray, dataSet: DataSet): (INDArray, Seq[Float]) = {
 
     @tailrec
@@ -39,7 +41,5 @@ class PegasosSGD(
     helperOptimizer(initWeights, Seq[Float](), 1)
 
   }
-
-
 }
 

@@ -6,10 +6,18 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 
+/**
+  * Calculates binary classification metrics based on a comparison of real and predicted labels
+  *
+  * @param realLabels NDArray of real labels
+  * @param predictedLabels NDArray of predicted lables
+  */
 
+class BinaryClassificationMetrics(val realLabels: INDArray, val predictedLabels: INDArray) {
 
-class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: INDArray) {
-
+  /**
+    * stores unique sorted values of predicted labels
+    */
   lazy val binTreshholds: Seq[Float] = predictedLabels
       .ravel
       .toArray
@@ -19,12 +27,24 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
       .reverse
       .toSeq
 
+  /**
+    * class contains the result of confusion matrix
+    *
+    * @param predictedClass predicted class value
+    * @param realClass real class value
+    * @param qty number of cases
+    */
 
   case class Confusion(predictedClass: Float, realClass: Float, qty: Int)
 
+  /**
+    * Calculates confusion matrix for different levels of threshold
+    *
+    */
+
   lazy val confusionMatrixByThreshold: Seq[(Float, Seq[Confusion])] = {
 
-    val zipped = Nd4j.hstack( predictedLabels, outcome)
+    val zipped = Nd4j.hstack( predictedLabels, realLabels)
       .toArray
 
     binTreshholds.map { threshold =>
@@ -39,8 +59,12 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
       (threshold, confusion) }
   }
 
+  /**
+    * Calculates Recall metrics for different levels of threshold
+    * @return collection of floats with pair: (threshold, recall)
+    */
 
-  def recallByTreshhold: Seq[(Float, Float)] = {
+  def recallByTreshold: Seq[(Float, Float)] = {
 
     val totalRealPositives: Int = confusionMatrixByThreshold.map (_._2).head
       .filter(_.realClass == 1)
@@ -56,7 +80,12 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
       (threshold, if(truePositives == 0) 0 else truePositives.toFloat / totalRealPositives.toFloat)}
   }
 
-  def precisionByTreshhold: Seq[(Float, Float)] = {
+  /**
+    * Calculates Precision metrics for different levels of threshold
+    * @return collection of floats with pair: (threshold, precision)
+    */
+
+  def precisionByThreshold: Seq[(Float, Float)] = {
 
     confusionMatrixByThreshold.map { case (threshold, confusions) =>
       val truePositives = confusions
@@ -71,6 +100,11 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
 
       (threshold, if(truePositives == 0) 0 else truePositives.toFloat / allPositives.toFloat)}
   }
+
+  /**
+    * Computes the ROC curve
+    * @return collection of pairs (fpr, tpr)
+    */
 
   def roc: Seq[(Float, Float)] = {
 
@@ -101,9 +135,13 @@ class BinaryClassificationMetrics(val outcome: INDArray, val predictedLabels: IN
 
        (fpr, tpr)  }
 
-    (0.0f, 0.0f) +: rocCurve :+ (1.0f, 1.0f)
+    ((0.0f, 0.0f)) +: rocCurve :+ ((1.0f, 1.0f))
   }
 
+  /**
+    * calculates AUC value (area under ROC curve)
+    * @return AUC
+    */
   def aucRoc: Float =
     roc.sortBy( x => (x._1, x._2))
       .sliding(2)

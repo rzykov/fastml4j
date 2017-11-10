@@ -9,10 +9,31 @@ import fastml4j.util.Implicits._
 
 abstract class Loss{
 
+  /** Calculates the loss function value
+    *
+    * @param weights input weights vector
+    * @param dataSet training dataset
+    * @return computed value of the loss function
+    */
   def loss(weights: INDArray, dataSet: DataSet): Float
+
+
+  /** Calculates the gradient of loss function value
+    *
+    * @param weights input weights vector
+    * @param dataSet input weights vector
+    * @return computed value of the gradient of the loss function
+    */
   def gradient(weights: INDArray,dataSet: DataSet): INDArray
 
-  // More about gradient checking:  http://cs231n.github.io/neural-networks-3/
+
+  /** Calculate the gradient numerically, useful for a testing of gradient functions
+    * More about gradient checking:  http://cs231n.github.io/neural-networks-3/
+    * @param weights input weights vector
+    * @param dataSet input weights vector
+    * @param eps delta parameter for a derivative calculation
+    * @return computed value of the gradient of the loss function
+    */
   def numericGradient(weights: INDArray, dataSet: DataSet, eps: Float = 1e-6f): INDArray =
     (0 until weights.columns).map {
       i =>

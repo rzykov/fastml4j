@@ -6,26 +6,53 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.factory.Nd4j
 
+/**
+  * Calculates regression metrics based on a comparison of real and predicted labels
+  *
+  * @param realLabels NDArray of real labels
+  * @param predictedLabels NDArray of predicted lables
+  */
 
+class RegressionMetrics(val realLabels: INDArray, val predictedLabels: INDArray) {
 
-class RegressionMetrics(val real: INDArray, val predictedLabels: INDArray) {
+  private lazy val numCases: Float = realLabels.rows().toFloat
+  require(numCases > 1, "use matrix rather than vectors")
 
+  /**
+    * calculates root of sum of squared differences
+    */
 
-  lazy val rootDifferenceSumSquared: Float =  Nd4j.norm2(real - predictedLabels).sumFloat
+  lazy val rootDifferenceSumSquared: Float =  Nd4j.norm2(realLabels - predictedLabels).sumFloat
+
+  /**
+    * calculates sum of squared differences
+    */
 
   lazy val differenceSumSquared: Float =  rootDifferenceSumSquared * rootDifferenceSumSquared
 
-  lazy val differenceVariance: Float = (real - predictedLabels).variance
+  /**
+    * calculates the variance of errors (differences)
+    */
 
-  lazy val numCases: Float = real.rows().toFloat
-
-  require(numCases > 1, "use matrix rather than vectors")
+  lazy val differenceVariance: Float = (realLabels - predictedLabels).variance
+  /**
+    * Calculates MSE
+    * @return MSE
+    */
 
   def meanSquaredError: Float = differenceSumSquared / numCases
-
+  /**
+    * Calculates RMSE
+    * @return RMSE
+    */
   def rootMeanSquaredError: Float = rootDifferenceSumSquared / math.sqrt(numCases).toFloat
 
-  lazy val meanAbsoluteError: Float = Nd4j.norm1(real - predictedLabels).sumFloat
+  /**
+    * Calculates Mean Absolute Error(MAE)
+    * @return MAE
+    */
+
+  lazy val meanAbsoluteError: Float = Nd4j.norm1(realLabels - predictedLabels).sumFloat
 
   override def toString = s"rootMeanSquaredError: $rootMeanSquaredError  \nmeanSquaredError $meanSquaredError \nmeanAbsoluteerror $meanAbsoluteError\n"
 

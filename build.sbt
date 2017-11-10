@@ -1,7 +1,3 @@
-import AssemblyKeys._
-
-assemblySettings
-
 organization := "org.github.rzykov.fastml4j"
 
 name := "fastml4j"
@@ -22,21 +18,18 @@ libraryDependencies += "org.nd4j" % "nd4j-native-platform" % nd4jVersion
 
 resolvers += "Maven" at "http://repo1.maven.org/maven2/"
 
-assembleArtifact in packageScala := false
-
 fork in Test := true
 
 val meta = """META.INF(.)*""".r
 
-mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
-  {
-    case PathList("javax", "servlet", xs @ _*) => MergeStrategy.last
-    case PathList("javax", "activation", xs @ _*) => MergeStrategy.last
-    case PathList("org", "apache", xs @ _*) => MergeStrategy.last
-    case PathList("com", "esotericsoftware", xs @ _*) => MergeStrategy.last
-    case PathList("plugin.properties") => MergeStrategy.last
-    case meta(_) => MergeStrategy.discard
-    case x => old(x)
-  }
-}
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-Yno-adapted-args",
+  "-Ywarn-dead-code",
+  "-Ywarn-unused",
+  "-Ywarn-value-discard"
+)
+
 

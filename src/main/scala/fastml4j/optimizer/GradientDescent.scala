@@ -10,6 +10,8 @@ import fastml4j.util.Implicits._
 import scala.annotation.tailrec
 
 /**
+  * Classical gradient descent
+  *
   * Created by rzykov on 23/06/17.
   */
 class GradientDescent(
@@ -17,9 +19,7 @@ class GradientDescent(
   val stepSize: Float,
   val eps: Float = 1e-6f) extends Optimizer {
 
-
-  override def optimize(loss: Loss, initWeights: INDArray, dataset: DataSet)
-    : (INDArray, Seq[Float]) = {
+  override def optimize(loss: Loss, initWeights: INDArray, dataset: DataSet): (INDArray, Seq[Float]) = {
 
     @tailrec
     def helperOptimizer( prevWeights:INDArray, losses: Seq[Float]): (INDArray, Seq[Float]) = {

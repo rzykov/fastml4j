@@ -11,8 +11,17 @@ import fastml4j.util.Intercept
 
 
 /**
-  * Created by rzykov on 02/07/17.
+  * Linear regression model based on OLS (ordinary least squares)
+  *
+  * @param lambdaL2  - regularisation parameter for L2
+  * @param alpha  - step parameter for optimizer
+  * @param maxIterations - max iterations for optimizer
+  * @param stohasticBatchSize - batch size, valid only for stohastic gradient descent
+  * @param optimizerType - which optimizer to use
+  * @param eps - minimum change for loss function, used by optimizer
+  * @param calcIntercept - include fitting of the intercept
   */
+
 class LinearRegression(
   val lambdaL2: Float,
   val alpha: Float = 0.01f,
@@ -20,7 +29,6 @@ class LinearRegression(
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "GradientDescent",
   val eps: Float = 1e-6f,
-  val standardize: Boolean = true,
   val calcIntercept: Boolean = true) extends RegressionModel with Intercept {
 
   private class OLSLossL2 (override val lambdaL2: Float, override val calcIntercept: Boolean)

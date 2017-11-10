@@ -10,8 +10,17 @@ import fastml4j.util.Implicits._
 import fastml4j.util.Intercept
 
 /**
-  * Created by rzykov on 23/06/17.
+  * SVM linear based on hinge loss. Creates a class of the SVM model
+  *
+  * @param lambdaL2  - regularisation parameter for L2
+  * @param alpha  - step parameter for optimizer
+  * @param maxIterations - max iterations for optimizer
+  * @param stohasticBatchSize - batch size, valid only for stohastic gradient descent
+  * @param optimizerType - which optimizer to use
+  * @param eps - minimum change for loss function, used by optimizer
+  * @param calcIntercept - include fitting of the intercept
   */
+
 class SVM(val lambdaL2: Float,
   val alpha: Float = 0.01f,
   val maxIterations: Int = 1000,
@@ -29,7 +38,6 @@ class SVM(val lambdaL2: Float,
 
     val optimizer: Optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)
-    //  case "GradientDescentDecreasingLearningRate" => new GradientDescentDecreasingLearningRate(maxIterations, alpha, eps)
       case "PegasosSGD" => new PegasosSGD(maxIterations, alpha, eps)
       case _ => throw new Exception("Optimizer %s is not supported".format(optimizerType))
     }

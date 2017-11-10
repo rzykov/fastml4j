@@ -9,6 +9,8 @@ import scala.util.Random
 object DataGenerators {
 
   /**
+    * Generate test data for regression tasks
+    *
     * @param intercept Data intercept
     * @param weights  Weights to be applied.
     * @param xMean the mean of the generated features. Lots of time, if the features are not properly
@@ -44,7 +46,15 @@ object DataGenerators {
     new DataSet(features, labels)
   }
 
-  //from Spark test
+  /**
+    * Generates test data for classification problems
+    *
+    * @param offset
+    * @param weights
+    * @param nPoints
+    * @param seed
+    * @return
+    */
   def generateLogisticInput(
     offset: Float,
     weights: Array[Float],

@@ -23,9 +23,9 @@ class BinaryClassificationMetricsSuite extends FunSuite {
     expectedRecalls: Seq[Float]): Unit = {
 
     assertSeq(metrics.binTreshholds, expectedThresholds)
-    assertTupleSeq(metrics.precisionByTreshhold, expectedThresholds.zip(expectedPrecisions))
+    assertTupleSeq(metrics.precisionByThreshold, expectedThresholds.zip(expectedPrecisions))
 
-    assertTupleSeq(metrics.recallByTreshhold, expectedThresholds.zip(expectedRecalls))
+    assertTupleSeq(metrics.recallByTreshold, expectedThresholds.zip(expectedRecalls))
     assertTupleSeq(metrics.roc, expectedROCCurve)
   }
 

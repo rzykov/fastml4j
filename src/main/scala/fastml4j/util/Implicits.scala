@@ -27,6 +27,7 @@ object Implicits  {
       val intercept = Nd4j.ones(dataSet.numExamples(),1)
       val newDataSet = dataSet.copy()
       newDataSet.addFeatureVector(intercept)
+      hasIntercept = true
       newDataSet
     }
   }

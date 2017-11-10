@@ -43,7 +43,7 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
                                               b = random * 100 - 50} yield Array(a.toFloat ,b.toFloat, 1.0f)
 
     val labels = trainData.map{ case Array(a, b, c) => if (a > b )  Array(1.0f) else Array(0.0f) }
-    val weights: Seq[Array[Float]] =  (1 to 100).map{ _ => Array(random *10 - 5 toFloat, random * 2 toFloat, random - 0.5 toFloat ) }
+    val weights: Seq[Array[Float]] =  (1 to 100).map{ _ => Array((random *10 - 5).toFloat, (random * 2).toFloat, (random - 0.5).toFloat ) }
     val loss2 = new HingeLoss
 
     val gradients = weights.map{ w =>   (loss2.gradient(w.toNDArray, new DataSet(trainData.toArray.toNDArray, labels.toArray.toNDArray)).sumFloat,

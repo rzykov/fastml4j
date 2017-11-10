@@ -10,16 +10,24 @@ import org.nd4j.linalg.indexing.conditions.Conditions
 import fastml4j.util.Implicits._
 
 /**
+  * Hinge Loss
+  * http://www1.inf.tu-dresden.de/~ds24/lehre/ml_ws_2013/ml_11_hinge.pdf
+  *
   * Created by rzykov on 31/05/17.
   */
 
 
 class HingeLoss extends Loss {
 
-  //http://www1.inf.tu-dresden.de/~ds24/lehre/ml_ws_2013/ml_11_hinge.pdf
-  // Our loss function with {0, 1} labels is max(0, 1 - (2y - 1) (f_w(x)))
-  // Therefore the gradient is -(2y - 1)*x
-
+  /**
+    * Transform loss function from  {1, -1} to {0, 1}
+    *
+    * Our loss function with {0, 1} labels is max(0, 1 - (2y - 1) (f_w(x)))
+    * Therefore the gradient is -(2y - 1)*x
+    *
+    * @param labels
+    * @return scaled labels
+    */
   def labelScaled(labels: INDArray) = 2f * labels - 1f
 
   def pureLoss(weights: INDArray, dataSet: DataSet): INDArray = {

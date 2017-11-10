@@ -1,8 +1,5 @@
 package fastml4j.classification
 
-/**
-  * Created by rzykov on 13/07/17.
-  */
 import fastml4j.util.Implicits._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
@@ -13,11 +10,17 @@ import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.indexing.NDArrayIndex
 import org.nd4j.linalg.ops.transforms.Transforms
 
-
 /**
-  * Created by rzykov on 13/07/17.
+  * Logistic regression. Creates a class of the logistic regression model
+  *
+  * @param lambdaL2  - regularisation parameter for L2
+  * @param alpha  - step parameter for optimizer
+  * @param maxIterations - max iterations for optimizer
+  * @param stohasticBatchSize - batch size, valid only for stohastic gradient descent
+  * @param optimizerType - which optimizer to use
+  * @param eps - minimum change for loss function, used by optimizer
+  * @param calcIntercept - include fitting of the intercept
   */
-
 
 class LogisticRegression
   (val lambdaL2: Float,
