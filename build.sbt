@@ -1,4 +1,4 @@
-organization := "org.github.rzykov.fastml4j"
+organization := "org.github.rzykov"
 
 name := "fastml4j"
 
