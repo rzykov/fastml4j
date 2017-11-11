@@ -19,8 +19,14 @@ approach. The vectorwise approach makes code more readable and faster. You can u
 operations with it with only a few symbols.
 
 ## Getting started
+* Build:
+```bash
+git clone https://github.com/rzykov/fastml4j
+cd fastml4j
+sbt package
+```   
+* [Scala Doc for this package](https://rzykov.github.io/fastml4j/api/)
 * Link to Scala notebook
-* Link to Scala doc
 * How to use it from maven
 
 ## Roadmap
