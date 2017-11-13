@@ -1,4 +1,4 @@
-organization := "org.github.rzykov"
+organization := "com.github.rzykov"
 
 name := "fastml4j"
 
@@ -21,6 +21,39 @@ resolvers += "Maven" at "http://repo1.maven.org/maven2/"
 fork in Test := true
 
 val meta = """META.INF(.)*""".r
+
+useGpg := true
+
+homepage := Some(url("https://github.com/rzykov/fastml4j"))
+
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/rzykov/fastml4j"),
+    "scm:git@github.com:rzykov/fastml4j.git"
+  )
+)
+
+developers := List(
+  Developer("rzykov",
+    "Roman Zykov",
+    "rzykov@gmail.com",
+    url("https://github.com/rzykov")))
+
+licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
+
+pomIncludeRepository := (_ => false)
+
+publishArtifact in Test := false
+
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+
+publishMavenStyle := true
 
 scalacOptions ++= Seq(
   "-deprecation",

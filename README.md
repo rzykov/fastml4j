@@ -28,7 +28,34 @@ sbt package
 * [Scala Doc for this package](https://rzykov.github.io/fastml4j/api/)
 * Link to Scala notebook
 * How to use it from maven
-
+```
+Apache Maven
+<dependency>
+    <groupId>com.github.rzykov</groupId>
+    <artifactId>fastml4j_2.11</artifactId>
+    <version>0.1</version>
+</dependency>
+    
+Apache Buildr
+'com.github.rzykov:fastml4j_2.11:jar:0.1'
+   
+Apache Ivy
+<dependency org="com.github.rzykov" name="fastml4j_2.11" rev="0.1" />
+    
+Groovy Grape
+@Grapes( 
+@Grab(group='com.github.rzykov', module='fastml4j_2.11', version='0.1') 
+)
+    
+Gradle/Grails
+compile 'com.github.rzykov:fastml4j_2.11:0.1'
+    
+Scala SBT
+libraryDependencies += "com.github.rzykov" % "fastml4j_2.11" % "0.1"
+    
+Leiningen
+[com.github.rzykov/fastml4j_2.11 "0.1"]
+```
 ## Roadmap
 * Decision trees with categorical variables and missing data
 * General ensembles
@@ -43,7 +70,7 @@ via [JavaCPP](https://github.com/bytedeco/javacpp-presets). It's hard to write o
 * __Why did you write own implicits instead of using nd4s library?__
   Nd4s looks too complicated for my purposes. Also found that it doesn't contain some DSL 
   elements. Personally, I don't like Implicits, but in this case they are in the right place.
-  My preferrable way of using them is to  import them explicitly in any source file. 
+  My preferrable way of using them is to import them explicitly in any source file. 
   It gives a hint to the reader to show up the fact for using implicits and where to find them.  
 * __Why did you choose Float rather than Double?__
   ND4J uses Float as a default type. It looks reasonable  because it saves a memory. 
