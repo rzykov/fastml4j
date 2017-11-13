@@ -18,6 +18,21 @@ good library: [Smile](https://github.com/haifengl/smile). It's been written in J
 approach. The vectorwise approach makes code more readable and faster. You can use matrix maths 
 operations with it with only a few symbols.
 
+## Features
+* Logistic regression
+* Linear SVM
+* Linear regression (classical OLS)
+* Binary classification metrics
+* Regression metrics
+
+## Roadmap
+* Decision trees with categorical variables and missing data
+* General ensembles
+* Random forests
+* Advanced optimising algorithms
+* Gradient boosted trees. I'm going to use the existed library [Catboost](https://github.com/catboost/catboost) 
+via [JavaCPP](https://github.com/bytedeco/javacpp-presets). It's hard to write own good GBRT.
+
 ## Getting started
 * Build:
 ```bash
@@ -56,13 +71,6 @@ libraryDependencies += "com.github.rzykov" % "fastml4j_2.11" % "0.1"
 Leiningen
 [com.github.rzykov/fastml4j_2.11 "0.1"]
 ```
-## Roadmap
-* Decision trees with categorical variables and missing data
-* General ensembles
-* Random forests
-* Advanced optimising algorithms
-* Gradient boosted trees. I'm going to use the existed library [Catboost](https://github.com/catboost/catboost) 
-via [JavaCPP](https://github.com/bytedeco/javacpp-presets). It's hard to write own good GBRT.
 
 ## FAQ
 * __Why did you choose ND4J?__
