@@ -11,7 +11,7 @@ import com.github.rzykov.fastml4j.util.DataGenerators._
 /**
   * Created by rzykov on 02/07/17.
   */
-class ImplicitSuite extends FunSuite with BeforeAndAfter {
+class ImplicitsSuite extends FunSuite with BeforeAndAfter {
 
   test("Intercept") {
     val features = Array(Array(1.0,2.0, 3.0), Array(4.0, 5.0, 6.0)).toNDArray

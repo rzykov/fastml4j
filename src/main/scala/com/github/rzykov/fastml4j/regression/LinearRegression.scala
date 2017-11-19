@@ -59,9 +59,9 @@ class LinearRegression(
   }
 
   def predict(inputVector: INDArray): Float = {
-    (inputVector dot weights).sumFloat
+    (inputVector dot weights.T).sumFloat
   }
 
-  def transform(dataSet: DataSet): INDArray = (weights dot dataSet.getFeatures.T)
+  def predict(dataSet: DataSet): INDArray = dataSet.getFeatures dot weights.T
 
 }

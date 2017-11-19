@@ -4,7 +4,6 @@ package com.github.rzykov.fastml4j.loss
   * Created by rzykov on 25/06/17.
   */
 
-import com.github.rzykov.fastml4j.loss.HingeLoss
 import org.scalatest._
 import org.scalatest.Matchers._
 import com.github.rzykov.fastml4j.util.Implicits._
@@ -38,7 +37,7 @@ class HingeLossSuite extends FunSuite with BeforeAndAfter {
 
   test("HingeLoss: gradient random") {
     val samples = 1000
-    val trainData: Seq[Array[Float]] = for { i <- (1 to samples)
+    val trainData: Seq[Array[Float]] = for { i <- 1 to samples
                                               a = random * 10 - 5
                                               b = random * 100 - 50} yield Array(a.toFloat ,b.toFloat, 1.0f)
 

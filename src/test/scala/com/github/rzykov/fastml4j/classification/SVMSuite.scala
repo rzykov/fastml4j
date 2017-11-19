@@ -36,7 +36,7 @@ class SVMSuite extends FunSuite with BeforeAndAfter  {
 
     assert(lr.weights.get(0,0) / lr.weights.get(0,1)  === coef +- 2.0f)
     assert(lr.intercept === 0f)
-  }
-*/
+  }*/
+
 
 }

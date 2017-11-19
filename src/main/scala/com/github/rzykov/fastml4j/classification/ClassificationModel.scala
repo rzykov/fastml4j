@@ -31,6 +31,16 @@ abstract class ClassificationModel{
 
   def predictClass(inputVector: INDArray): Float
 
+
+  /** predict class (1 or 0) for one vector of data
+    * @param dataSet with features
+    *
+    * @return NDArray with predicted classes
+    * */
+
+  def predictClass(dataSet: DataSet): INDArray
+
+
   /** predict the probability of positive class for one vector of data
     * @param inputVector INDarray data vector
     *
@@ -38,6 +48,15 @@ abstract class ClassificationModel{
     * */
 
   def predict(inputVector: INDArray): Float
+
+
+  /** predict the probability of positive class for one vector of data
+    * @param dataSet with features and labels
+    *
+    * @return NDArray with probabilities of positive class
+    * */
+
+  def predict(dataSet: DataSet): INDArray
 
 }
 

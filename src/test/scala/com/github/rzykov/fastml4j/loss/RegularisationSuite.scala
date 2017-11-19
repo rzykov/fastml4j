@@ -1,6 +1,5 @@
 package com.github.rzykov.fastml4j.loss
 
-import com.github.rzykov.fastml4j.loss.{L2, Loss}
 import org.scalatest.Matchers._
 import org.scalatest._
 

@@ -10,7 +10,7 @@ import org.nd4j.linalg.factory.Nd4j
   * Calculates binary classification metrics based on a comparison of real and predicted labels
   *
   * @param realLabels NDArray of real labels
-  * @param predictedLabels NDArray of predicted lables
+  * @param predictedLabels NDArray of predicted labels
   */
 
 class BinaryClassificationMetrics(val realLabels: INDArray, val predictedLabels: INDArray) {
@@ -18,7 +18,7 @@ class BinaryClassificationMetrics(val realLabels: INDArray, val predictedLabels:
   /**
     * stores unique sorted values of predicted labels
     */
-  lazy val binTreshholds: Seq[Float] = predictedLabels
+  lazy val binThresholds: Seq[Float] = predictedLabels
       .ravel
       .toArray
       .flatten
@@ -47,7 +47,7 @@ class BinaryClassificationMetrics(val realLabels: INDArray, val predictedLabels:
     val zipped = Nd4j.hstack( predictedLabels, realLabels)
       .toArray
 
-    binTreshholds.map { threshold =>
+    binThresholds.map { threshold =>
       val confusion = zipped
         .map { case Array(predicted, real) =>
           val predictedClass = if( predicted >= threshold ) 1 else 0
@@ -59,12 +59,16 @@ class BinaryClassificationMetrics(val realLabels: INDArray, val predictedLabels:
       (threshold, confusion) }
   }
 
+//  def recall(threshold: Float = 0.5f): Float = {}
+
+//  def precision(threshold: Float = 0.5f): Float = {}
+
   /**
     * Calculates Recall metrics for different levels of threshold
     * @return collection of floats with pair: (threshold, recall)
     */
 
-  def recallByTreshold: Seq[(Float, Float)] = {
+  def recallByThreshold: Seq[(Float, Float)] = {
 
     val totalRealPositives: Int = confusionMatrixByThreshold.map (_._2).head
       .filter(_.realClass == 1)
@@ -146,7 +150,7 @@ class BinaryClassificationMetrics(val realLabels: INDArray, val predictedLabels:
     roc.sortBy( x => (x._1, x._2))
       .sliding(2)
       .map { case Seq((leftX, leftY), (rightX, rightY)) =>  (rightX - leftX) * (rightY + leftY ) / 2 }
-      .reduce(_+_)
+      .sum
 
 
 }

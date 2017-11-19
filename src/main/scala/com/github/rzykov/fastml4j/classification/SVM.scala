@@ -10,6 +10,9 @@ import com.github.rzykov.fastml4j.loss._
 import org.nd4j.linalg.dataset.DataSet
 import com.github.rzykov.fastml4j.util.Implicits._
 import com.github.rzykov.fastml4j.util.Intercept
+import org.nd4j.linalg.indexing.BooleanIndexing
+import org.nd4j.linalg.indexing.conditions.Conditions
+import org.nd4j.linalg.ops.transforms.Transforms
 
 /**
   * SVM linear based on hinge loss. Creates a class of the SVM model
@@ -35,8 +38,9 @@ class SVM(val lambdaL2: Float,
     extends HingeLoss with L2 with Intercept
 
   def fit(dataSet: DataSet, initWeights: Option[INDArray] = None): Unit = {
-
     dataSet.validate()
+
+    val dataSetIntercept: DataSet = dataSetWithIntercept(dataSet)
 
     val optimizer: Optimizer = optimizerType match {
       case "GradientDescent" => new GradientDescent(maxIterations, alpha, eps)
@@ -46,21 +50,29 @@ class SVM(val lambdaL2: Float,
 
     val (weightsOut, lossesOut) = optimizer.optimize(
         new HingeLossL2(lambdaL2, calcIntercept),
-        initWeights.getOrElse(Nd4j.zeros(dataSet.numInputs)),
-        dataSet)
+        initWeights.getOrElse(Nd4j.zeros(dataSetIntercept.numInputs)),
+        dataSetIntercept)
 
     intercept = extractIntercept(weightsOut)
     weights = extractWeights(weightsOut)
     losses = lossesOut
   }
 
-  def predictClass(inputVector: INDArray): Float = {
-    val sign = math.signum((inputVector dot weights.T).sumFloat)
-    if( sign != 0 ) sign.toFloat else 1.0f
+  def predictClass(dataSet:  DataSet): INDArray = {
+    val out = Transforms.sign(predict(dataSet))
+    BooleanIndexing.replaceWhere(out, 1.0f, Conditions.equals(0.0f))
+    out
   }
 
-  def predict(inputVector:  INDArray): Float = {
-    (inputVector dot weights + intercept ).sumFloat
-  }
+  def predictClass(inputVector: INDArray): Float = {
+    val sign = math.signum((inputVector dot weights.T).sumFloat)
+    if( sign == 0 ) 1.0f else sign.toFloat
+  } //TODO - tests!
+
+  def predict(inputVector:  INDArray): Float =
+    (inputVector dot weights.T + intercept ).sumFloat
+
+  def predict(dataSet:  DataSet): INDArray =
+    dataSet.getFeatures dot weights.T + intercept
 
 }

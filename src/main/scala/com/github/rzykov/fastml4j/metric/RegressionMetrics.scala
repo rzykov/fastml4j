@@ -10,7 +10,7 @@ import org.nd4j.linalg.factory.Nd4j
   * Calculates regression metrics based on a comparison of real and predicted labels
   *
   * @param realLabels NDArray of real labels
-  * @param predictedLabels NDArray of predicted lables
+  * @param predictedLabels NDArray of predicted labels
   */
 
 class RegressionMetrics(val realLabels: INDArray, val predictedLabels: INDArray) {

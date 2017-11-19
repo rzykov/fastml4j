@@ -4,7 +4,6 @@ package com.github.rzykov.fastml4j.loss
   * Created by rzykov on 25/06/17.
   */
 
-import com.github.rzykov.fastml4j.loss.OLSLoss
 import org.scalatest.Matchers._
 import org.scalatest._
 
@@ -54,7 +53,7 @@ class OLSSuite extends FunSuite with BeforeAndAfter {
     val coef2 = 3
     val intercept = 4
     val samples = 1000
-    val trainData: Seq[Array[Double]] = for { i <- (1 to samples)
+    val trainData: Seq[Array[Double]] = for { i <- 1 to samples
             a = random * 10 - 5
             b = random * 100 - 50} yield Array(a ,b, 1.0)
 

@@ -6,7 +6,7 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.dataset.DataSet
 
 /**
-  * Abstrat class for optimizers (gradient descent, SGD etc)
+  * Abstract class for optimizers (gradient descent, SGD etc)
   *
   * Created by rzykov on 23/06/17.
   */

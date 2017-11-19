@@ -10,6 +10,7 @@ trait Intercept {
 
   val calcIntercept: Boolean
   var intercept: Float = 0f
+  protected var dataSetWithIntercept = DataSet.empty()
 
   def dataSetWithIntercept(dataSet: DataSet): DataSet =
     if (calcIntercept) dataSet.addIntercept else dataSet

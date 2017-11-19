@@ -21,7 +21,7 @@ object Implicits  {
 
   implicit class DataSetWithIntercept(dataSet: DataSet)  {
     private var hasIntercept: Boolean = false
-    def getIntecept: Boolean =  hasIntercept
+    def getIntercept: Boolean =  hasIntercept
     def addIntercept(): DataSet = {
       if(hasIntercept) throw new RuntimeException(s"DataSet has already an intercept.")
       val intercept = Nd4j.ones(dataSet.numExamples(),1)

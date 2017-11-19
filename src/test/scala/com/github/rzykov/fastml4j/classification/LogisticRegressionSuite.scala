@@ -4,7 +4,6 @@ package com.github.rzykov.fastml4j.classification
   * Created by rzykov on 25/06/17.
   */
 
-import com.github.rzykov.fastml4j.classification.LogisticRegression
 import org.scalatest._
 import org.scalatest.Matchers._
 import com.github.rzykov.fastml4j.util.Implicits._

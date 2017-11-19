@@ -23,7 +23,13 @@ abstract class RegressionModel  {
     *
     * @return output of the model
     * */
-
   def predict(inputVector: INDArray): Float
+
+  /** predict the probability of positive class for one vector of data
+    * @param dataSet dataset with features and labels
+    *
+    * @return NDArray with output of the model
+    * */
+  def predict(dataSet: DataSet): INDArray
 
 }

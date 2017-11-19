@@ -4,7 +4,6 @@ package com.github.rzykov.fastml4j.loss
   * Created by rzykov on 25/06/17.
   */
 
-import com.github.rzykov.fastml4j.loss.LogisticLoss
 import org.scalatest._
 import org.scalatest.Matchers._
 import com.github.rzykov.fastml4j.util.Implicits._
@@ -29,7 +28,7 @@ class LogisticLossSuite extends FunSuite with BeforeAndAfter {
   test("LogisticLoss: gradient checking by random") {
 
     val samples = 1000
-    val trainData: Seq[Array[Double]] = for { i <- (1 to samples)
+    val trainData: Seq[Array[Double]] = for { i <- 1 to samples
                                               a = random * 1
                                               b = random * 1 - 0.5} yield Array(a ,b, 1.0)
 

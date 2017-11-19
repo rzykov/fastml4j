@@ -10,7 +10,8 @@ import com.github.rzykov.fastml4j.optimizer._
 import com.github.rzykov.fastml4j.loss._
 import com.github.rzykov.fastml4j.util.Intercept
 import org.nd4j.linalg.dataset.DataSet
-import org.nd4j.linalg.indexing.NDArrayIndex
+import org.nd4j.linalg.indexing.{BooleanIndexing, NDArrayIndex}
+import org.nd4j.linalg.indexing.conditions.Conditions
 import org.nd4j.linalg.ops.transforms.Transforms
 
 /**
@@ -32,7 +33,8 @@ class LogisticRegression
   val stohasticBatchSize: Int = 100,
   val optimizerType: String = "GradientDescent",
   val eps: Float = 1e-6f,
-  val calcIntercept: Boolean = true) extends ClassificationModel with Intercept {
+  val calcIntercept: Boolean = true,
+  val threshold: Float = 0.5f) extends ClassificationModel with Intercept {
 
   private class LogisticLossL2(override val lambdaL2: Float, override val calcIntercept: Boolean)
     extends HingeLoss with L2 with Intercept
@@ -58,12 +60,19 @@ class LogisticRegression
     losses = lossesOut
   }
 
-  def predictClass(inputVector: INDArray): Float = {
-    math.round(predict(inputVector))
+  def predictClass(inputVector: INDArray): Float =
+    if(predict(inputVector) >= threshold) 1f else 0f
+
+  def predictClass(dataSet: DataSet): INDArray = {
+    val out = Transforms.sign(predict(dataSet))
+    BooleanIndexing.replaceWhere(out, 1.0f, Conditions.equals(0.0f))
+    out
   }
 
-  def predict(inputVector:  INDArray): Float = {
-    Transforms.sigmoid(inputVector dot weights + intercept).sumFloat
-  }
+  def predict(inputVector:  INDArray): Float =
+    Transforms.sigmoid(inputVector dot weights.T + intercept).sumFloat
+
+  def predict(dataSet: DataSet): INDArray =
+    Transforms.sigmoid(dataSet.getFeatures dot weights.T + intercept)
 
 }

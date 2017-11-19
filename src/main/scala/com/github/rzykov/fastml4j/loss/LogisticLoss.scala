@@ -22,17 +22,17 @@ class LogisticLoss extends Loss {
   override def loss(weights: INDArray, dataSet: DataSet): Float = {
 
     val sigmoidVec = sigmoid(weights, dataSet.getFeatureMatrix)
-    val lossVec = ((dataSet.getLabels.T.neg) dot (Transforms.log(sigmoidVec))) -
-      ((1.0f + dataSet.getLabels.T.neg) dot Transforms.log((1.0f + sigmoidVec.neg)))
+    val lossVec = (dataSet.getLabels.T.neg dot Transforms.log(sigmoidVec)) -
+      ((1.0f + dataSet.getLabels.T.neg) dot Transforms.log(1.0f + sigmoidVec.neg))
 
-    (lossVec.sumFloat / dataSet.numExamples)
+    lossVec.sumFloat / dataSet.numExamples
   }
 
   //grad = 1/m*sum((sigmoid(X*theta)-y).*X,1)';
   override def gradient(weights: INDArray, dataSet: DataSet): INDArray = {
-    val main = ((dataSet.getFeatures.T) dot (sigmoid(weights, dataSet.getFeatures) - dataSet.getLabels))
+    val main = dataSet.getFeatures.T dot (sigmoid(weights, dataSet.getFeatures) - dataSet.getLabels)
 
-    (main.T) / (dataSet.numExamples)
+    main.T / dataSet.numExamples
   }
 
 }

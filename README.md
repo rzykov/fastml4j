@@ -78,7 +78,7 @@ Leiningen
 * __Why did you write own implicits instead of using nd4s library?__
   Nd4s looks too complicated for my purposes. Also found that it doesn't contain some DSL 
   elements. Personally, I don't like Implicits, but in this case they are in the right place.
-  My preferrable way of using them is to import them explicitly in any source file. 
+  My preferable way of using them is to import them explicitly in any source file. 
   It gives a hint to the reader to show up the fact for using implicits and where to find them.  
 * __Why did you choose Float rather than Double?__
   ND4J uses Float as a default type. It looks reasonable  because it saves a memory. 

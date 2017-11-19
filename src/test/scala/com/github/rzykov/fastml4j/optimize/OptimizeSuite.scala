@@ -41,7 +41,7 @@ class OptimizeSuite extends FunSuite with BeforeAndAfter {
     nPoints: Int,
     seed: Int): (Array[Array[Float]], Array[Array[Float]]) = {
     val rnd = new Random(seed)
-    val x1 = Array.fill[Float](nPoints)(rnd.nextGaussian() toFloat)
+    val x1 = Array.fill[Float](nPoints)(rnd.nextGaussian().toFloat)
 
     val y = (0 until nPoints).map { i =>
       val p = 1.0 / (1.0 + math.exp(-(offset + scale * x1(i))))
